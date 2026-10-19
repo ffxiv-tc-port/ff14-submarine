@@ -1,6 +1,7 @@
 <template>
     <div class="set-finder-block float-layer">
-        <div class="float-layer-title">配置搜索器</div>
+        <div class="float-layer-title">配置搜尋器</div>
+        <div class="finder-rank-hint">以潛艇等級 {{ submarineStore.currentRank }} 計算(等級不到的零件系列不列入)</div>
         <div class="finder-option ff14-input">
             <table>
                 <tr v-for="(_, i) in set_filter" :key="i">
@@ -10,13 +11,13 @@
             </table>
         </div>
         <div class="ff14-btn-group" style="margin-top: 1em">
-            <div class="ff14-btn" @click="close">关闭</div>
+            <div class="ff14-btn" @click="close">關閉</div>
         </div>
         <template v-if="validSets.length > 0">
             <p
-                >共有 {{ validSets.length }} 条符合的记录。<template
+                >共有 {{ validSets.length }} 筆符合的記錄。<template
                     v-if="validSets.length > submarineStore.maxFilterCount"
-                    >最多显示 {{ submarineStore.maxFilterCount }} 条记录，请缩小查询范围。</template
+                    >最多顯示 {{ submarineStore.maxFilterCount }} 筆記錄,請縮小查詢範圍。</template
                 ></p
             >
             <table class="sets-table wikitable" v-if="validSets.length <= submarineStore.maxFilterCount">
@@ -43,12 +44,12 @@
                         ></td
                     >
                     <td v-for="(st_v, i) in set.st" :key="i">{{ st_v }}</td>
-                    <td class="selected" v-if="checkSet(set)">已添加</td>
-                    <td class="add-set" v-else>添加</td>
+                    <td class="selected" v-if="checkSet(set)">已加入</td>
+                    <td class="add-set" v-else>加入</td>
                 </tr>
             </table>
         </template>
-        <p v-else>没有找到符合条件的记录，请修改查询范围。</p>
+        <p v-else>沒有找到符合條件的記錄,請修改查詢範圍。</p>
     </div>
 </template>
 
@@ -58,8 +59,8 @@ import { SubmarineAttr } from '../constant/enum';
 import { useSubmarineStore } from '../stores/submarine';
 import type { SetStatus } from '../types/submarineSet';
 
-const set_filter = ref([0, 0, 0, 0, 0, 0]); // 搜索用过滤器
-const filter_sort = reactive([-1, -1]); // 第一个参数是用哪个属性排序，第二个参数是正序还是逆序
+const set_filter = ref([0, 0, 0, 0, 0, 0]); // 搜尋用過濾器
+const filter_sort = reactive([-1, -1]); // 第一個參數是用哪個屬性排序,第二個參數是正序還是逆序
 
 const submarineStore = useSubmarineStore();
 
@@ -105,11 +106,16 @@ watchEffect(() => {
     validSets.value = valid_sets;
 });
 
-function checkSet(c_set: Record<string, any>) {
-    // 检查配置是否已经有存在的
+function checkSet(c_set: SetStatus) {
+    // 檢查配置是否已經存在(上游原版取 set[0] 是 bug,永遠比不到)
     for (let i = 0; i < submarineStore.sets.length; i++) {
         const set = submarineStore.sets[i];
-        if (c_set.set[0] == set[0] && c_set.set[1] == set[1] && c_set.set[2] == set[2] && c_set.set[3] == set[3]) {
+        if (
+            c_set.set[0] == set.set[0] &&
+            c_set.set[1] == set.set[1] &&
+            c_set.set[2] == set.set[2] &&
+            c_set.set[3] == set.set[3]
+        ) {
             return true;
         }
     }
@@ -122,8 +128,6 @@ function checkAndAddSet(set: SetStatus) {
             setStatus: set,
             index: -1,
         });
-    } else {
-        // console.log('已经存在');
     }
 }
 
@@ -154,6 +158,12 @@ function sortTitleColor(attr_index: number) {
 </script>
 
 <style lang="less">
+.finder-rank-hint {
+    margin: 0.5em 0;
+    color: #8a8a8a;
+    font-size: 12px;
+}
+
 .finder-option table {
     border-collapse: separate;
     border-spacing: 0 5px;

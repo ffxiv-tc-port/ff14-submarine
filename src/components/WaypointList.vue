@@ -2,7 +2,7 @@
     <div class="waypoint-block">
         <div class="explore-list">
             <table class="wikitable">
-                <tr><th>探索地点</th></tr>
+                <tr><th>探索地點</th></tr>
                 <template v-for="p in currentWarpoints" :key="p.id">
                     <tr
                         ><td class="waypoint" :class="{ selected: isSelect(p.id) }"
@@ -41,12 +41,12 @@
             </div>
             <div class="ff14-btn-group" style="margin-top: 1em; text-align: center; width: 100%">
                 <div class="ff14-btn" @click.prevent.stop="resetSelected()">重置</div>
-                <div class="ff14-btn" @click.prevent.stop="changeMap()">切换地图</div>
+                <div class="ff14-btn" @click.prevent.stop="changeMap()">切換地圖</div>
             </div>
         </div>
         <div class="explore-drop">
             <table class="drop-map wikitable">
-                <tr><th :colspan="2">获得物品</th></tr>
+                <tr><th :colspan="2">獲得物品</th></tr>
                 <tr v-for="item in rewards" :key="item.ID">
                     <td class="drop-item-name" :style="{ width: item_name_length + 3 + 'em' }"
                         ><ItemLink :item="item"></ItemLink
@@ -75,7 +75,7 @@ import ItemLink from './ItemLink.vue';
 const submarineStore = useSubmarineStore();
 
 const map_name = computed(() =>
-    submarineStore.maps[submarineStore.map] ? submarineStore.maps[submarineStore.map].cn : '未知地图',
+    submarineStore.maps[submarineStore.map] ? submarineStore.maps[submarineStore.map].cn : '未知地圖',
 );
 const currentWarpoints = computed(() => submarineStore.currentWarpoints);
 
@@ -109,14 +109,14 @@ function changeMap() {
 .waypoint-block {
     overflow: hidden;
     margin: 0 auto;
-    width: Calc(12em + 20em + 2em + 350px);
+    width: Calc(12em + 26em + 2em + 350px);
 
     > div {
         float: left;
     }
 }
 
-// 航点列表
+// 航點列表
 .explore-list {
     width: 12em;
 }
@@ -140,7 +140,7 @@ function changeMap() {
     }
 }
 
-// 海图
+// 海圖(圖檔已鏡像進 src/assets/maps,由 vite 打包)
 .explore-map {
     margin: 0 1em;
 }
@@ -160,27 +160,39 @@ function changeMap() {
     }
 
     &.map1 {
-        background: url('@{ImageUrl}/ff14/uploads/f/f8/%E6%BA%BA%E6%B2%A1%E6%B5%B7%E5%9C%B0%E5%9B%BE.png');
+        background: url('../assets/maps/map1.png');
         &::before {
-            background: url('@{ImageUrl}/ff14/uploads/f/fe/%E6%BA%BA%E6%B2%A1%E6%B5%B7%E8%B7%AF%E7%BA%BF.png');
+            background: url('../assets/maps/map1_route.png');
         }
     }
     &.map2 {
-        background: url('@{ImageUrl}/ff14/uploads/a/a2/%E7%81%B0%E6%B5%B7%E5%9C%B0%E5%9B%BE.png');
+        background: url('../assets/maps/map2.png');
         &::before {
-            background: url('@{ImageUrl}/ff14/uploads/1/1a/%E7%81%B0%E6%B5%B7%E8%B7%AF%E7%BA%BF.png');
+            background: url('../assets/maps/map2_route.png');
         }
     }
     &.map3 {
-        background: url('@{ImageUrl}/ff14/uploads/4/48/%E7%BF%A0%E6%B5%AA%E6%B5%B7%E5%9C%B0%E5%9B%BE.png');
+        background: url('../assets/maps/map3.png');
         &::before {
-            background: url('@{ImageUrl}/ff14/uploads/6/6f/%E7%BF%A0%E6%B5%AA%E6%B5%B7%E8%B7%AF%E7%BA%BF.png');
+            background: url('../assets/maps/map3_route.png');
         }
     }
     &.map4 {
-        background: url('@{ImageUrl}/ff14/uploads/9/9a/%E5%A6%96%E6%AD%8C%E6%B5%B7%E5%9C%B0%E5%9B%BE.png');
+        background: url('../assets/maps/map4.png');
         &::before {
-            background: url('@{ImageUrl}/ff14/uploads/e/eb/%E5%A6%96%E6%AD%8C%E6%B5%B7%E8%B7%AF%E7%BA%BF.png');
+            background: url('../assets/maps/map4_route.png');
+        }
+    }
+    &.map5 {
+        background: url('../assets/maps/map5.png');
+        &::before {
+            background: url('../assets/maps/map5_route.png');
+        }
+    }
+    &.map6 {
+        background: url('../assets/maps/map6.png');
+        &::before {
+            background: url('../assets/maps/map6_route.png');
         }
     }
 }
@@ -213,7 +225,7 @@ function changeMap() {
 
 .explore-drop {
     overflow-y: auto;
-    width: 20em;
+    width: 26em;
     max-height: 550px;
 
     .drop-map {

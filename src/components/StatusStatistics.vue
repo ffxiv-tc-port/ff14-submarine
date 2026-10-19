@@ -1,10 +1,10 @@
 <template>
     <div class="statistics-block">
         <table class="statistics-table wikitable">
-            <tr><th :colspan="7">最短路线情报</th></tr>
+            <tr><th :colspan="7">最短路線情報</th></tr>
             <template v-if="submarineStore.selected.length > 0">
                 <tr>
-                    <th>目的地顺序</th>
+                    <th>目的地順序</th>
                     <td :colspan="4">
                         <ul class="hor-waypoints-list">
                             <li
@@ -25,9 +25,9 @@
                     <td class="r2">{{ submarineStore.routeInfo.max_surveillance }}</td>
                 </tr>
                 <tr>
-                    <th>航行距离</th>
+                    <th>航行距離</th>
                     <td :colspan="2">{{ submarineStore.routeInfo.distance }}</td>
-                    <th>预览速度</th>
+                    <th>預覽速度</th>
                     <td
                         >{{ submarineStore.speed }}
                         <i class="fa fa-pencil-square btn-red" aria-hidden="true" @click="layerSetSpeed"></i
@@ -36,24 +36,24 @@
                     <td class="r2">{{ submarineStore.routeInfo.max_retrieval }}</td>
                 </tr>
                 <tr>
-                    <th>航行时间预览</th>
+                    <th>航行時間預覽</th>
                     <td :colspan="2">{{ routeTimeCostText }}</td>
-                    <th>回归时间</th>
+                    <th>回歸時間</th>
                     <td>{{ routeRealTimeText }}</td>
                     <th>最大恩惠需求</th>
                     <td class="r2">{{ submarineStore.routeInfo.max_favor }}</td>
                 </tr>
                 <tr>
-                    <th :colspan="7">沿途目的地情报</th>
+                    <th :colspan="7">沿途目的地情報</th>
                 </tr>
                 <tr>
                     <th style="width: 16%">目的地</th>
                     <th style="width: 9%">探索需求</th>
                     <th style="width: 9%">收集需求</th>
                     <th style="width: 9%">恩惠需求</th>
-                    <th style="width: 19%">探索物品<span class="r0">（低）</span></th>
-                    <th style="width: 19%">探索物品<span class="r1">（中）</span></th>
-                    <th style="width: 19%">探索物品<span class="r2">（高）</span></th>
+                    <th style="width: 19%">探索物品<span class="r0">(低)</span></th>
+                    <th style="width: 19%">探索物品<span class="r1">(中)</span></th>
+                    <th style="width: 19%">探索物品<span class="r2">(高)</span></th>
                 </tr>
                 <tr v-for="w in submarineStore.routeInfo.routeOrder" v-bind:key="w">
                     <td>{{
@@ -66,7 +66,7 @@
                         }}</span></td
                     >
                     <td style="text-align: center"
-                        ><span class="r1">{{ submarineStore.currentWarpoints[w].statReq.retrieval.optim }}</span
+                        ><span class="r1">{{ submarineStore.currentWarpoints[w].statReq.retrieval.norm }}</span
                         >&nbsp;/&nbsp;<span class="r2">{{
                             submarineStore.currentWarpoints[w].statReq.retrieval.optim
                         }}</span></td
@@ -88,7 +88,7 @@
                     ></td>
                 </tr>
             </template>
-            <tr v-else><td :colspan="7">请选择希望探索的目的地</td></tr>
+            <tr v-else><td :colspan="7">請選擇希望探索的目的地</td></tr>
         </table>
     </div>
 </template>

@@ -1,11 +1,11 @@
 <template>
     <div class="add-waypoint-block float-layer">
-        <div class="float-layer-title">按时间预览调整航线</div>
+        <div class="float-layer-title">按時間預覽調整航線</div>
         <div class="add-waypoint">
             <table class="wikitable" style="text-align: left">
                 <tr
-                    ><th style="width: 10em">航点</th><th style="width: 10em">航行时间</th
-                    ><th style="width: 10em">回归时间</th></tr
+                    ><th style="width: 10em">航點</th><th style="width: 10em">航行時間</th
+                    ><th style="width: 10em">回歸時間</th></tr
                 >
                 <tr
                     v-for="wp in submarineStore.currentWarpoints"
@@ -20,7 +20,7 @@
                         style="text-align: center"
                         :colspan="2"
                         v-if="submarineStore.selected.includes(wp.id)"
-                        >已添加</td
+                        >已加入</td
                     >
                     <template v-else>
                         <td>{{ getSimRouteTimeCostText(wp.id) }}</td>
@@ -30,7 +30,7 @@
             </table>
         </div>
         <div class="ff14-btn-group" style="margin-top: 1em">
-            <div class="ff14-btn" @click="close">关闭</div>
+            <div class="ff14-btn" @click="close">關閉</div>
         </div>
     </div>
 </template>
@@ -71,3 +71,4 @@ function getSimRouteRealTimeText(new_wp_id: number) {
     return getRouteRealTimeText(submarineStore.startRealTime, temp_best_route.time, submarineStore.speed);
 }
 </script>
+

@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
     <head>
         <meta charset="UTF-8" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="./favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/huijiwiki.css" />
-        <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <!-- 圖示與海圖背景熱連 huijistatic CDN,該 CDN 對外站 referer 回 403,必須不送 referer -->
+        <meta name="referrer" content="no-referrer" />
+        <link rel="stylesheet" href="./huijiwiki.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        />
         <script src="data.js"></script>
-        <title>GBF DATA SEARCHER</title>
+        <title>部隊潛水艇小工具(台服版)</title>
     </head>
     <body>
         <div id="wrapper">
@@ -16,21 +21,17 @@
                     <div id="content" class="row">
                         <article class="col-sm-12 wiki-body-section" role="main">
                             <section id="bodyContent" class="body">
-                                <div id="mw-content-text" lang="zh-CN" dir="ltr" class="mw-content-ltr"
+                                <div id="mw-content-text" lang="zh-TW" dir="ltr" class="mw-content-ltr"
                                     ><div class="mw-parser-output" style="min-height: 1000px">
-                                        <!-- 以下需要复制到HTML -->
-                                        <!-- {{=<% %>=}} -->
                                         <div id="app-submarine-tool">
                                             <div
                                                 class="ff14-loading-block"
                                                 style="min-height: 400px; text-align: center"
                                             >
                                                 <div class="ff14-loading" style="margin-top: 150px"></div>
-                                                <div>正在初始化，请稍候……</div>
+                                                <div>正在初始化,請稍候……</div>
                                             </div>
                                         </div>
-                                        <!-- built files will be auto injected -->
-                                        <!-- 以上需要复制到HTML结束 -->
                                     </div></div
                                 >
                             </section>

@@ -19,20 +19,31 @@ export class SubmarineComponent {
         return this.raw.c;
     }
 
+    /** 本系列零件的裝備需求等級(四件同級,取最大值保險) */
+    get rankReq() {
+        let rank = 0;
+        for (const part of Object.values(this.parts)) {
+            if (part.等級 > rank) {
+                rank = part.等級;
+            }
+        }
+        return rank;
+    }
+
     private getInitParts() {
         const itemData = getItemData();
         const parts = {} as Record<SubmarinePart, PartInfo>;
         this.raw.items.forEach((itemId) => {
             const item = itemData[itemId];
-            if (item === undefined || item.机体数据 === undefined) {
+            if (item === undefined || item.機體數據 === undefined) {
                 throw new Error(`item ${itemId} not found`);
             }
-            parts[item.机体数据.位置] = item.机体数据;
+            parts[item.機體數據.位置] = item.機體數據;
         });
         return parts;
     }
 
-    getValue(part: SubmarinePart, valueType: '重量' | '探索性能' | '收集性能' | '巡航速度' | '航行距离' | '恩惠') {
+    getValue(part: SubmarinePart, valueType: '重量' | '探索性能' | '收集性能' | '巡航速度' | '航行距離' | '恩惠') {
         return this.parts[part][valueType];
     }
 
@@ -57,7 +68,7 @@ export class SubmarineComponent {
     }
 
     getDistance(part: SubmarinePart) {
-        return this.parts[part].航行距离;
+        return this.parts[part].航行距離;
     }
 
     getFavor(part: SubmarinePart) {

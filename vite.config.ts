@@ -9,6 +9,7 @@ export default defineConfig(({ command, mode }) => {
     console.log(mode);
 
     return {
+        base: './', // GitHub Pages 部署在子路徑下,資產一律走相對路徑
         plugins: [vue()],
         resolve: {
             alias: {

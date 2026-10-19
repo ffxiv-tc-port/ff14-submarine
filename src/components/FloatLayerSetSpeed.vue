@@ -1,11 +1,11 @@
 <template>
     <div class="set-speed-block float-layer">
-        <div class="float-layer-title">选择预览速度</div>
+        <div class="float-layer-title">選擇預覽速度</div>
         <div class="set-speed">
             <table class="wikitable">
                 <tr
-                    ><th style="width: 5em">速度</th><th style="width: 10em">探索时间</th
-                    ><th style="width: 10em">回归时间</th></tr
+                    ><th style="width: 5em">速度</th><th style="width: 10em">探索時間</th
+                    ><th style="width: 10em">回歸時間</th></tr
                 >
                 <tr
                     v-for="i in 40"
@@ -21,7 +21,7 @@
             </table>
         </div>
         <div class="ff14-btn-group" style="margin-top: 1em">
-            <div class="ff14-btn" @click="close">关闭</div>
+            <div class="ff14-btn" @click="close">關閉</div>
         </div>
     </div>
 </template>

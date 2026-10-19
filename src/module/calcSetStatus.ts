@@ -53,9 +53,9 @@ export function calcSetStatus(setInfo: SetInfo) {
 }
 
 export function calcSetBaseStatus(setInfo: SetInfo) {
-    // 统计船的性能
+    // 統計船的性能(等級獎勵依目前設定的潛艇等級)
     const submarineStore = useSubmarineStoreWithoutSetup();
-    const status = submarineStore.maxRankBonus.slice();
+    const status = submarineStore.currentRankBonus.slice();
     const components = submarineStore.components;
 
     const set = setInfo.set;

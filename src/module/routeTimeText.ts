@@ -1,9 +1,9 @@
 export function getRouteTimeCostText(time: number, speed: number) {
-    let min = time / speed + 12 * 60; // 航行基础时间12小时
+    let min = time / speed + 12 * 60; // 航行基礎時間 12 小時
     const day = min >= 24 * 60 ? Math.floor(min / (24 * 60)) : 0;
     const hour = Math.floor((min % (24 * 60)) / 60);
     min = Math.floor(min % 60);
-    return (day > 0 ? day + '日' : '') + hour + '小时' + min + '分';
+    return (day > 0 ? day + '日' : '') + hour + '小時' + min + '分';
 }
 
 export function getRouteRealTimeText(time_base: number, time: number, speed: number) {

@@ -29,18 +29,19 @@ import { useSubmarineStore } from './stores/submarine';
 const submarineStore = useSubmarineStore();
 
 onMounted(() => {
-    // 设置定时器
+    // 設置定時器
     setInterval(() => {
         submarineStore.updateStartRealTime(Date.now());
     }, 5000);
     updateRouteInfo();
     // eslint-disable-next-line
-    console.log('部队潜水艇工具 已加载 版本:' + submarineStore.version);
+    console.log('部隊潛水艇工具(台服版) 已載入 版本:' + submarineStore.version);
 });
 
 const layer = computed(() => submarineStore.layer);
 const map = computed(() => submarineStore.map);
 const speed = computed(() => submarineStore.speed);
+const rank = computed(() => submarineStore.rank);
 const sets = computed(() => submarineStore.sets);
 
 watch(layer, (newVal) => {
@@ -56,9 +57,8 @@ watch(layer, (newVal) => {
 const selected = computed(() => submarineStore.selected);
 
 watch(
-    [map, speed, sets, selected],
+    [map, speed, rank, sets, selected],
     () => {
-        console.log(111);
         updateRouteInfo();
         submarineStore.saveLocalData();
     },
@@ -97,7 +97,7 @@ body.float-layer-show {
 
 #app-submarine-tool {
     margin: 0 auto;
-    width: Calc(~'12em + 20em + 2em + 350px');
+    width: Calc(~'12em + 26em + 2em + 350px');
     font-size: 14px;
 
     .r0 {

@@ -3375,11 +3375,11 @@ table.navbox+table.navbox{margin-top:-1px}
     .item-icon.size-64 .item-icon--img{top: 3px; left: 6px;}
     .item-icon.size-128 .item-icon--img{top: 6px; left: 12px;}
     .item-icon--cavecover{position: absolute; top: 0; left: 0;}
-    .item-icon.size-40 .item-icon--cavecover{width: 48px; height: 48px;background: url(https://huiji-public.huijistatic.com/ff14/uploads/c/c4/Action_icon_cover_40.png);}
+    .item-icon.size-40 .item-icon--cavecover{width: 48px; height: 48px;background: url(./vendor/Action_icon_cover_40.png);}
     .item-icon--cover{position: absolute; top: 0; left: 0;}
-    .item-icon.size-40 .item-icon--cover{width: 48px; height: 48px;background: url(https://huiji-public.huijistatic.com/ff14/uploads/d/db/Item_icon_cover_40.png);}
-    .item-icon.size-64 .item-icon--cover{width: 76px; height: 76px;background: url(https://huiji-public.huijistatic.com/ff14/uploads/8/88/Item_icon_cover_64.png);}
-    .item-icon.size-128 .item-icon--cover{width: 152px; height: 152px;background: url(https://huiji-public.huijistatic.com/ff14/uploads/f/fc/Item_icon_cover_128.png);}
+    .item-icon.size-40 .item-icon--cover{width: 48px; height: 48px;background: url(./vendor/Item_icon_cover_40.png);}
+    .item-icon.size-64 .item-icon--cover{width: 76px; height: 76px;background: url(./vendor/Item_icon_cover_64.png);}
+    .item-icon.size-128 .item-icon--cover{width: 152px; height: 152px;background: url(./vendor/Item_icon_cover_128.png);}
     .item-icon--number{position: absolute; font-weight: bold; color: #efefef; text-shadow: 1px 0 2px #0a0905, -1px 0 2px #0a0905, 0 1px 2px #0a0905, 0 -1px 2px #0a0905;}
     .item-icon.size-40 .item-icon--number{font-size: 14px; bottom: 3px; right: 6px;}
     .item-icon.size-40+.item-baseinfo {padding-right: 4px;}
@@ -3387,7 +3387,7 @@ table.navbox+table.navbox{margin-top:-1px}
     /* item-link */
     .item-name{display: inline-block;line-height:1.375}
     .item-name.item-hq{padding-right: 18px; position: relative;}
-    .item-name.item-hq::after{content:"";height: 16px;width: 16px;background: url(https://huiji-public.huijistatic.com/ff14/uploads/0/0e/Hq.png);position: absolute;right: 0;top: 3px;}
+    .item-name.item-hq::after{content:"";height: 16px;width: 16px;background: url(./vendor/Hq.png);position: absolute;right: 0;top: 3px;}
     .item-name a, .item-name a:hover, .item-name a:focus{color: inherit;text-shadow: 1px 1px 2px #000;}
     .item-baseinfo{display: inline-block; padding-left: 4px;}
     .item-category{color: #efefef; font-size: 12px;}
@@ -3482,7 +3482,7 @@ table.navbox+table.navbox{margin-top:-1px}
     .infobox-item--header {padding: 0 !important;display: table-row;vertical-align: middle;}
     .infobox-item--icon{position: relative;display: table-cell;}
     .infobox-item--icon-img{position: absolute; top: 6px; left: 12px;}
-    .infobox-item--icon-cover{background: url(https://huiji-public.huijistatic.com/ff14/uploads/3/33/Item-infobox-icon-cover.png); width: 152px; height: 152px; position: absolute; top: 0; left: 0;}
+    .infobox-item--icon-cover{background: url(./vendor/Item-infobox-icon-cover.png); width: 152px; height: 152px; position: absolute; top: 0; left: 0;}
     .infobox-item--name{display: table-cell;vertical-align: top;padding-top: 20px;}
     .infobox-item--name-title{font-size: 24px;line-height: 1.2;}
     .infobox-item--name-category{font-size: 14px;}
@@ -3496,7 +3496,7 @@ table.navbox+table.navbox{margin-top:-1px}
     .infobox-item--require {color: #91e39b;}
     .infobox-item--series-name{color: #ddd;}
     .infobox-item .ff14-content-box-block{margin-left: -12px;margin-right: -12px;}
-    .infobox-item--info-socket li {width: 24px;height: 24px;margin: 0 !important;background: url(https://huiji-public.huijistatic.com/ff14/uploads/2/2a/Item-socket.png);}
+    .infobox-item--info-socket li {width: 24px;height: 24px;margin: 0 !important;background: url(./vendor/Item-socket.png);}
     .item-searies-bouns{margin: 0.3em 0 0 12px;}
     .item-searies-bouns--title{color: #97dc60;}
     @media (max-width:767px){
@@ -3525,7 +3525,7 @@ table.navbox+table.navbox{margin-top:-1px}
     .companion-detail{position: relative;}
     .companion-detail.item-page{padding: 20px; background-color: #2e2e2e; border-radius: 4px; overflow: hidden; box-shadow: 0 1px 2px #000; max-width: 400px; min-height: 400px;}
     .companion-detail--type{color: #d6ba7b; font-size: 28px; position: relative; padding-left: 32px;}
-    .companion-detail--type:before{content: ""; background: url(https://huiji-public.huijistatic.com/ff14/uploads/c/c7/Notebook-icon.png); width: 32px; height: 32px; position: absolute; left: 0; top: 4px;}
+    .companion-detail--type:before{content: ""; background: url(./vendor/Notebook-icon.png); width: 32px; height: 32px; position: absolute; left: 0; top: 4px;}
     .companion-detail--type.detail-type-companion::before{background-position: 0 0;}
     .companion-detail--type.detail-type-mount::before{background-position: -32px 0;}
     .companion-detail--type.detail-type-flymount::before{background-position: -64px 0;}
@@ -3565,11 +3565,11 @@ table.navbox+table.navbox{margin-top:-1px}
     .item-craft-table td .ff14-content-box-block hr {background-color: #444444;}
     ul.item-craft-list, ul.item-craft-list ul{margin: 0; list-style-type: none;}
     ul.item-craft-list{margin: 10px 23px;}
-    ul.item-craft-list li{background: url(https://huiji-public.huijistatic.com/ff14/uploads/0/07/Repice_line.gif) 0 0 no-repeat; padding: 0 0 0 30px; margin: 0 !important; line-height: inherit !important;}
+    ul.item-craft-list li{background: url(./vendor/Repice_line.gif) 0 0 no-repeat; padding: 0 0 0 30px; margin: 0 !important; line-height: inherit !important;}
     ul.item-craft-list>li {background: none;padding: 0;}
     ul.item-craft-list ul>li:last-child{background-position: 0 -1102px;}
     ul.item-craft-list li>div {padding: 2px 0;line-height: 24px;}
-    ul.item-craft-list li>div+ul{margin-top: -7px; padding-top: 7px; background: url(https://huiji-public.huijistatic.com/ff14/uploads/f/f2/Repice_line_2.gif) 0 -1px no-repeat;}
+    ul.item-craft-list li>div+ul{margin-top: -7px; padding-top: 7px; background: url(./vendor/Repice_line_2.gif) 0 -1px no-repeat;}
     @media (max-width:767px){
         .item-craft-table{width: 100%;}
     }
@@ -3691,37 +3691,37 @@ table.navbox+table.navbox{margin-top:-1px}
     .mw-jsonconfig th, .mw-jsonconfig td {border: 1px solid #3c3c3c;}
     /* loading icon */
     @keyframes loading{0%, 100%{transform: rotate(0deg);} 100%{transform: rotate(360deg);}}
-    .ff14-loading{display: inline-block; animation: loading 3s steps(12, end) infinite;width: 60px;height: 60px;background-size: cover;background-image: url(https://huiji-public.huijistatic.com/ff14/uploads/0/02/Loading.png);}
+    .ff14-loading{display: inline-block; animation: loading 3s steps(12, end) infinite;width: 60px;height: 60px;background-size: cover;background-image: url(./vendor/Loading.png);}
     /* 副本页样式 */
     .instance-infobox{width: 480px; position: relative;float: right;margin:0 0 30px 30px;}
     .instance-infobox--type{position: absolute; top: -16px; left: Calc(50% - 16px);}
     .content-type{width: 32px; height: 32px;}
-    .content-type.content-type-1{background: url(https://huiji-public.huijistatic.com/ff14/uploads/f/f0/061807.png);}
-    .content-type.content-type-2{background: url(https://huiji-public.huijistatic.com/ff14/uploads/3/3c/061801.png);}
-    .content-type.content-type-3{background: url(https://huiji-public.huijistatic.com/ff14/uploads/a/a1/061803.png);}
-    .content-type.content-type-4{background: url(https://huiji-public.huijistatic.com/ff14/uploads/c/c4/061804.png);}
-    .content-type.content-type-5{background: url(https://huiji-public.huijistatic.com/ff14/uploads/3/31/061802.png);}
-    .content-type.content-type-6{background: url(https://huiji-public.huijistatic.com/ff14/uploads/e/ef/061806.png);}
-    .content-type.content-type-7{background: url(https://huiji-public.huijistatic.com/ff14/uploads/1/18/061805.png);}
-    .content-type.content-type-8{background: url(https://huiji-public.huijistatic.com/ff14/uploads/d/db/061809.png);}
-    .content-type.content-type-9{background: url(https://huiji-public.huijistatic.com/ff14/uploads/4/4c/061808.png);}
-    .content-type.content-type-10{background: url(https://huiji-public.huijistatic.com/ff14/uploads/3/31/061811.png);}
-    .content-type.content-type-11{background: url(https://huiji-public.huijistatic.com/ff14/uploads/9/93/061812.png);}
-    .content-type.content-type-12{background: url(https://huiji-public.huijistatic.com/ff14/uploads/6/69/061813.png);}
-    .content-type.content-type-13{background: url(https://huiji-public.huijistatic.com/ff14/uploads/e/e5/061814.png);}
-    .content-type.content-type-14{background: url(https://huiji-public.huijistatic.com/ff14/uploads/c/c8/061810.png);}
-    .content-type.content-type-15{background: url(https://huiji-public.huijistatic.com/ff14/uploads/6/6f/061817.png);}
-    .content-type.content-type-16{background: url(https://huiji-public.huijistatic.com/ff14/uploads/1/1a/061815.png);}
-    .content-type.content-type-17{background: url(https://huiji-public.huijistatic.com/ff14/uploads/0/08/061816.png);}
-    .content-type.content-type-18{background: url(https://huiji-public.huijistatic.com/ff14/uploads/9/9e/061818.png);}
-    .content-type.content-type-19{background: url(https://huiji-public.huijistatic.com/ff14/uploads/3/39/061820.png);}
-    .content-type.content-type-20{background: url(https://huiji-public.huijistatic.com/ff14/uploads/b/b5/061823.png);}
-    .content-type.content-type-21{background: url(https://huiji-public.huijistatic.com/ff14/uploads/5/5e/061824.png);}
-    .content-type.content-type-22{background: url(https://huiji-public.huijistatic.com/ff14/uploads/3/3c/061801.png);}
-    .content-type.content-type-23{background: url(https://huiji-public.huijistatic.com/ff14/uploads/d/d5/061821.png);}
-    .content-type.content-type-24{background: url(https://huiji-public.huijistatic.com/ff14/uploads/0/01/061825.png);}
-    .content-type.content-type-28{background: url(https://huiji-public.huijistatic.com/ff14/uploads/5/51/061832.png);}
-    .content-type.content-type-90{background: url(https://huiji-public.huijistatic.com/ff14/uploads/e/e6/061819.png);}
+    .content-type.content-type-1{background: url(./vendor/061807.png);}
+    .content-type.content-type-2{background: url(./vendor/061801.png);}
+    .content-type.content-type-3{background: url(./vendor/061803.png);}
+    .content-type.content-type-4{background: url(./vendor/061804.png);}
+    .content-type.content-type-5{background: url(./vendor/061802.png);}
+    .content-type.content-type-6{background: url(./vendor/061806.png);}
+    .content-type.content-type-7{background: url(./vendor/061805.png);}
+    .content-type.content-type-8{background: url(./vendor/061809.png);}
+    .content-type.content-type-9{background: url(./vendor/061808.png);}
+    .content-type.content-type-10{background: url(./vendor/061811.png);}
+    .content-type.content-type-11{background: url(./vendor/061812.png);}
+    .content-type.content-type-12{background: url(./vendor/061813.png);}
+    .content-type.content-type-13{background: url(./vendor/061814.png);}
+    .content-type.content-type-14{background: url(./vendor/061810.png);}
+    .content-type.content-type-15{background: url(./vendor/061817.png);}
+    .content-type.content-type-16{background: url(./vendor/061815.png);}
+    .content-type.content-type-17{background: url(./vendor/061816.png);}
+    .content-type.content-type-18{background: url(./vendor/061818.png);}
+    .content-type.content-type-19{background: url(./vendor/061820.png);}
+    .content-type.content-type-20{background: url(./vendor/061823.png);}
+    .content-type.content-type-21{background: url(./vendor/061824.png);}
+    .content-type.content-type-22{background: url(./vendor/061801.png);}
+    .content-type.content-type-23{background: url(./vendor/061821.png);}
+    .content-type.content-type-24{background: url(./vendor/061825.png);}
+    .content-type.content-type-28{background: url(./vendor/061832.png);}
+    .content-type.content-type-90{background: url(./vendor/061819.png);}
     .instance-infobox--title{text-align: center; position: relative;}
     .instance-infobox--circle{position: absolute;width: 40px;height: 40px;border-radius: 50%;line-height: 40px;font-size: 14px;font-weight: bold;}
     .instance-infobox--circle.level{color: #000000;background: #ececec;top: 10px;left: 0;}
@@ -3766,15 +3766,15 @@ table.navbox+table.navbox{margin-top:-1px}
     .quest-frame{min-height: 600px;color: #333;position: relative;}
     .quest-frame--bg > div{position: absolute;}
     .quest-frame--bg-color{background: #dedfd6; width: Calc(100% - 10px); height: Calc(100% - 10px); top: 2px; left: 5px;}
-    .quest-frame--img-top1{background: url(https://huiji-public.huijistatic.com/ff14/uploads/4/45/Journal_frame_top1.png); background-size: 100% 100%; width: Calc(50% - 197px); height: 17px; top: 0; left: 156px;}
-    .quest-frame--img-top2{background: url(https://huiji-public.huijistatic.com/ff14/uploads/1/1b/Journal_frame_top2.png); background-size: 100% 100%; width: Calc(50% - 197px); height: 17px; top: 0; left: Calc(50% + 41px);}
-    .quest-frame--img-top-tray{background: url(https://huiji-public.huijistatic.com/ff14/uploads/4/4c/Journal_frame_top_tray.png); background-repeat: no-repeat; width: 82px; height: 28px; top: -11px; left: Calc(50% - 41px);}
-    .quest-frame--img-left{background: url(https://huiji-public.huijistatic.com/ff14/uploads/9/93/Journal_frame_left.png); background-size: 100% 100%; width: 22px; height: Calc(100% - 270px); top: 180px; left: 0;}
-    .quest-frame--img-right{background: url(https://huiji-public.huijistatic.com/ff14/uploads/a/a7/Journal_frame_right.png); background-size: 100% 100%; width: 22px; height: Calc(100% - 270px); top: 180px; right: 0;}
-    .quest-frame--img-bottom{background: url(https://huiji-public.huijistatic.com/ff14/uploads/0/0f/Journal_frame_bottom.png); background-size: 100% 100%; width: Calc(100% - 376px); height: 24px; bottom: 0; left: 188px;}
-    .quest-frame--img-top-corner{background: url(https://huiji-public.huijistatic.com/ff14/uploads/c/c9/Journal_frame_top_corner.png); background-repeat: no-repeat; width: 100%; height: 84px; top: 0; left: 0;}
-    .quest-frame--img-bottom-corner{background: url(https://huiji-public.huijistatic.com/ff14/uploads/7/7d/Journal_frame_bottom_corner.png); background-repeat: no-repeat; width: 100%; height: 90px; bottom: 0; left: 0;}
-    .quest-frame--img-left-pattern{background: url(https://huiji-public.huijistatic.com/ff14/uploads/8/8b/Journal_frame_left_pattern.png); background-repeat: no-repeat;background-position: 0 -2px; width: 100%; height: 96px; top: 84px; left: 0;}
+    .quest-frame--img-top1{background: url(./vendor/Journal_frame_top1.png); background-size: 100% 100%; width: Calc(50% - 197px); height: 17px; top: 0; left: 156px;}
+    .quest-frame--img-top2{background: url(./vendor/Journal_frame_top2.png); background-size: 100% 100%; width: Calc(50% - 197px); height: 17px; top: 0; left: Calc(50% + 41px);}
+    .quest-frame--img-top-tray{background: url(./vendor/Journal_frame_top_tray.png); background-repeat: no-repeat; width: 82px; height: 28px; top: -11px; left: Calc(50% - 41px);}
+    .quest-frame--img-left{background: url(./vendor/Journal_frame_left.png); background-size: 100% 100%; width: 22px; height: Calc(100% - 270px); top: 180px; left: 0;}
+    .quest-frame--img-right{background: url(./vendor/Journal_frame_right.png); background-size: 100% 100%; width: 22px; height: Calc(100% - 270px); top: 180px; right: 0;}
+    .quest-frame--img-bottom{background: url(./vendor/Journal_frame_bottom.png); background-size: 100% 100%; width: Calc(100% - 376px); height: 24px; bottom: 0; left: 188px;}
+    .quest-frame--img-top-corner{background: url(./vendor/Journal_frame_top_corner.png); background-repeat: no-repeat; width: 100%; height: 84px; top: 0; left: 0;}
+    .quest-frame--img-bottom-corner{background: url(./vendor/Journal_frame_bottom_corner.png); background-repeat: no-repeat; width: 100%; height: 90px; bottom: 0; left: 0;}
+    .quest-frame--img-left-pattern{background: url(./vendor/Journal_frame_left_pattern.png); background-repeat: no-repeat;background-position: 0 -2px; width: 100%; height: 96px; top: 84px; left: 0;}
     .quest-frame--img-quest-mark-fg{position: absolute; top: 18px; left: 20px;}
     .quest-frame--img-quest-mark{top: -33px; left: Calc(50% - 36px);}
     .quest-frame--img-quest-mark2 {right: -45px;top: -55px;}
@@ -3789,7 +3789,7 @@ table.navbox+table.navbox{margin-top:-1px}
     .quest-content-block{margin-top: 5px; margin-bottom: 10px; padding: 0 5px;}
     .quest-content-block--title{color: #fff; text-shadow: 1px 0 1px #000, -1px 0 1px #000, 0 1px 1px #000, 0 -1px 1px #000; position: relative; font-size: 14px; line-height: 24px;}
     .qcb-icon{padding-left: 25px;}
-    .qcb-icon::before{content: ""; background: url(https://huiji-public.huijistatic.com/ff14/uploads/0/05/Quest_icon.png); width: 24px; height: 24px; position: absolute; left: 0; top: 0;}
+    .qcb-icon::before{content: ""; background: url(./vendor/Quest_icon.png); width: 24px; height: 24px; position: absolute; left: 0; top: 0;}
     .qcb-icon.qcb-icon-01::before{background-position: 0 0;}
     .qcb-icon.qcb-icon-02::before{background-position: -24px 0;}
     .qcb-icon.qcb-icon-03::before{background-position: -48px 0;}
@@ -3798,17 +3798,17 @@ table.navbox+table.navbox{margin-top:-1px}
     .qcb-icon.qcb-icon-06::before{background-position: -120px 0;}
     .qcb-icon.qcb-icon-07::before{background-position: -144px 0;}
     .qcb-icon.qcb-icon-08::before{background-position: -168px 0;}
-    .quest-content-block--reward{background: url(https://huiji-public.huijistatic.com/ff14/uploads/b/bc/Reward_block.png); width: 374px; height: 49px; line-height: 49px; margin: 0 auto; padding: 0 15px;}
+    .quest-content-block--reward{background: url(./vendor/Reward_block.png); width: 374px; height: 49px; line-height: 49px; margin: 0 auto; padding: 0 15px;}
     .quest-content-block--reward.double{height: 90px; background-position: 0 -52px;}
     .quest-content-block--reward > div > div{display: inline-block; vertical-align: middle;}
     .quest-content-block--reward > div > div+div{margin-left: 8px;}
-    .quest-content-block--currency{position: relative; width: 62px; height: 49px; line-height: 49px; background: url(https://huiji-public.huijistatic.com/ff14/uploads/e/e1/Reward_currency_bg.png) no-repeat; background-position: 1px 34px;}
-    @font-face{font-family: BebasNeue; src: url('https://fs.huijiwiki.com/www/resources/font/BebasNeue.otf');}
+    .quest-content-block--currency{position: relative; width: 62px; height: 49px; line-height: 49px; background: url(./vendor/Reward_currency_bg.png) no-repeat; background-position: 1px 34px;}
+    @font-face{font-family: BebasNeue; src: url('./vendor/BebasNeue.otf');}
     .quest-content-block--currency-value{font-size: 22px; font-family: BebasNeue, sans-serif; font-weight: normal; right: 0; bottom: -8px;}
     .quest-content-block--item{height: 49px;line-height: 49px;position: relative;}
     .item-icon.size-32{width: 38px;height: 38px;line-height: 38px;}
     .item-icon.size-32 .item-icon--img{top: -2px;left: 3px;}
-    .item-icon.size-32 .item-icon--cover{width: 38px;height: 38px;line-height: 38px;background: url(https://huiji-public.huijistatic.com/ff14/uploads/8/88/Item_icon_cover_64.png);background-size: 100%;}
+    .item-icon.size-32 .item-icon--cover{width: 38px;height: 38px;line-height: 38px;background: url(./vendor/Item_icon_cover_64.png);background-size: 100%;}
     .item-icon.size-32 .item-icon--number{font-size: 14px;bottom: -7px;right: 3px;vertical-align: bottom;}
     .quest-content-block--reward > div > .quest-content-block--item+.quest-content-block--item{margin-left: -2px;}
     .quest-content-block--reward-line-2{margin-top: -7px;}
@@ -3850,7 +3850,7 @@ table.navbox+table.navbox{margin-top:-1px}
     .sploiler-alter{text-align: center; border-radius: 6px; background-color: #cc7100;width: auto;max-width: 450px; margin: 10px 0 10px 20px; padding: 15px 10px; position: relative; cursor: pointer; color: #fff; text-shadow: 0 1px 2px #222; box-shadow: 1px 1px #000;overflow: hidden;}
     .quest-talk-lang-selector input[type=checkbox]{display: none;}
     .quest-talk-lang-selector input[type=checkbox]:checked+label::before{background-position: 0 -16px;}
-    .quest-talk-lang-selector input[type=checkbox]+label::before{content: ""; background: url(https://huiji-public.huijistatic.com/ff14/uploads/7/72/Checkbox.png) no-repeat; width: 16px; height: 16px; position: absolute; left: 0; top: 0;}
+    .quest-talk-lang-selector input[type=checkbox]+label::before{content: ""; background: url(./vendor/Checkbox.png) no-repeat; width: 16px; height: 16px; position: absolute; left: 0; top: 0;}
     .quest-talk-lang-selector{background-color: #171717; border-radius: 6px; margin: 5px 5px 5px 20px; padding: 5px 10px; max-width: 450px; overflow: hidden; box-shadow: 1px 1px #000;}
     .quest-talk-lang-selector label{position: relative; padding-left: 18px; font-size: 16px; line-height: 20px; margin-right: 1em;}
     .quest-text-block{width: 450px; background: #dedfd6; border-radius: 15px; color: #333333; margin: 10px 0 10px 20px; padding: 5px 10px 5px 50px; position: relative; box-shadow: 1px 1px #000;}
@@ -3876,13 +3876,13 @@ table.navbox+table.navbox{margin-top:-1px}
     .ff14-nav{padding: 0;background-color: #2e2e2e;border-radius: 4px;box-shadow: 0 1px 2px #000;}
     .ff14-nav h3{padding: 15px 20px !important;}
     .ff14-nav--icon-group{overflow: hidden;}
-    .ff14-nav--icon-cover{background: url(https://huiji-public.huijistatic.com/ff14/uploads/8/8c/Content_icon_cover.png); background-position: -34px 0; width: 34px; height: 34px; position: absolute; top: 0; left: 0;}
+    .ff14-nav--icon-cover{background: url(./vendor/Content_icon_cover.png); background-position: -34px 0; width: 34px; height: 34px; position: absolute; top: 0; left: 0;}
     .ff14-nav--icon{width: 34px; height: 34px; position: relative;opacity: 0.9; cursor: pointer;float:left;}
     .ff14-nav--icon:hover{opacity: 1;}
     .ff14-nav--icon-img{position: absolute; left: 1px; top: 1px;}
     .ff14-nav--icon-img img {border-radius: 5px;}
     .ff14-nav--icon.selected .ff14-nav--icon-cover{background-position: 0 0;}
-    .ff14-nav--icon-mark {position: absolute;background: url(https://huiji-public.huijistatic.com/ff14/uploads/3/36/Icon_%E6%A0%87%E8%AE%B0.png);height: 16px;width: 16px;bottom: 2px;right: 2px;}
+    .ff14-nav--icon-mark {position: absolute;background: url(./vendor/Icon_%E6%A0%87%E8%AE%B0.png);height: 16px;width: 16px;bottom: 2px;right: 2px;}
     .ff14-nav--icon-mark.mark-1 {background-position: 0 0;}
     .ff14-nav--icon-mark.mark-2 {background-position: -16px 0;}
     .ff14-nav--icon-mark.mark-3 {background-position: -32px 0;}
@@ -3953,7 +3953,7 @@ table.navbox+table.navbox{margin-top:-1px}
     .ff14-input option{color: #ccc;}
     .ff14-input input[type=checkbox]{display: none;}
     .ff14-input input[type=checkbox]:checked+label::before{background-position: 0 -16px;}
-    .ff14-input input[type=checkbox]+label::before{content: ""; background: url(https://huiji-public.huijistatic.com/ff14/uploads/7/72/Checkbox.png) no-repeat; width: 16px; height: 16px; position: absolute; left: 0; top: 0;}
+    .ff14-input input[type=checkbox]+label::before{content: ""; background: url(./vendor/Checkbox.png) no-repeat; width: 16px; height: 16px; position: absolute; left: 0; top: 0;}
     .ff14-input input[type=checkbox]+label{position: relative;padding-left: 18px;font-size: 16px;line-height: 20px;margin-right: 1em;cursor: pointer;}
     .filter-button {padding: 2px 10px; font-size: 14px;line-height: 1.5;border-radius: 3px; border: 1px #3c3c3c solid;}
     .filter-button.submit{background-color: #334b80; color: #fff;}
@@ -3985,7 +3985,7 @@ table.navbox+table.navbox{margin-top:-1px}
     #gathering-setting table tr:nth-last-of-type(1) {border-bottom:0}
     
     /* 栽培信息 */
-    .cross-arrow{width: 20px; height: 20px; background: url(https://huiji-public.huijistatic.com/ff14/uploads/b/b1/Img_Crossarrow.png); margin: 0 auto;}
+    .cross-arrow{width: 20px; height: 20px; background: url(./vendor/Img_Crossarrow.png); margin: 0 auto;}
     .cross-arrow.right-cross{background-position: -20px 0;}
     .circle{width: 10px; height: 10px; display: inline-block; margin-left: 3px; border-radius: 50%;}
     .circle.yellow{background: #F0A626;}
@@ -3997,45 +3997,45 @@ table.navbox+table.navbox{margin-top:-1px}
     .achievement-tooltip--base{padding: 7px 7px; position: relative;}
     .achievement-tooltip--icon{display: inline-block; margin-right: 10px; position: relative;}
     .achievement-tooltip--icon img {width: 40px;height: 40px;}
-    .achievement-tooltip--icon:after{content:""; position: absolute; background: url(https://huiji-public.huijistatic.com/ff14/uploads/9/96/Achievement_icon_cover.png); height: 45px; width: 44px; top: -3px; left: -2px;}
+    .achievement-tooltip--icon:after{content:""; position: absolute; background: url(./vendor/Achievement_icon_cover.png); height: 45px; width: 44px; top: -3px; left: -2px;}
     .achievement-tooltip--name{display: inline-block; text-shadow: 1px 1px 1px #000; font-weight: bold;}
     .achievement-tooltip--point{position: absolute; right: 0.5em; top: 0px; font-size: 35px; line-height: 50px; font-style: italic; font-weight: bold; color: #efd191;}
-    .achievement-tooltip--point:before{content: ""; height: 21px; width: 20px; background: url(https://huiji-public.huijistatic.com/ff14/uploads/6/6c/Achievement_point.png); position: absolute; top: 10px; left: -20px;}
-    .achievement-tooltip--desc{padding: 3px 7px 7px; font-size: 13px; background: url(https://huiji-public.huijistatic.com/ff14/uploads/9/90/Icon_right_arrow.png) no-repeat 7px 0; min-height: 60px;}
+    .achievement-tooltip--point:before{content: ""; height: 21px; width: 20px; background: url(./vendor/Achievement_point.png); position: absolute; top: 10px; left: -20px;}
+    .achievement-tooltip--desc{padding: 3px 7px 7px; font-size: 13px; background: url(./vendor/Icon_right_arrow.png) no-repeat 7px 0; min-height: 60px;}
     .achievement-tooltip--desc-text{padding-left: 27px;}
     
     /* 幻卡展示 / 浮层 */
     .card-detail{max-width: 600px; padding: 20px;}
     .card-detail--tooltip{display: table-cell;vertical-align: top;}
-    .card-tooltip{width: 104px; height: 128px; margin: 0 auto; position: relative;background: url(https://huiji-public.huijistatic.com/ff14/uploads/1/10/CardBG.png); }
-    .card-rarity-1{background: url(https://huiji-public.huijistatic.com/ff14/uploads/1/12/CardStar_1.png)}
-    .card-rarity-2{background: url(https://huiji-public.huijistatic.com/ff14/uploads/3/37/CardStar_2.png)}
-    .card-rarity-3{background: url(https://huiji-public.huijistatic.com/ff14/uploads/c/c6/CardStar_3.png)}
-    .card-rarity-4{background: url(https://huiji-public.huijistatic.com/ff14/uploads/1/17/CardStar_4.png)}
-    .card-rarity-5{background: url(https://huiji-public.huijistatic.com/ff14/uploads/9/91/CardStar_5.png)}
+    .card-tooltip{width: 104px; height: 128px; margin: 0 auto; position: relative;background: url(./vendor/CardBG.png); }
+    .card-rarity-1{background: url(./vendor/CardStar_1.png)}
+    .card-rarity-2{background: url(./vendor/CardStar_2.png)}
+    .card-rarity-3{background: url(./vendor/CardStar_3.png)}
+    .card-rarity-4{background: url(./vendor/CardStar_4.png)}
+    .card-rarity-5{background: url(./vendor/CardStar_5.png)}
     .card-rarity{width: 29px; height: 28px; position: absolute; left: 9px; top: 6px;}
     .card-img img{position: relative;}
     .card-type{width: 20px; height: 20px; position: absolute; top: 3px; right: 4px;}
-    .card-type-1{background: url(https://huiji-public.huijistatic.com/ff14/uploads/6/68/%E8%9B%AE%E7%A5%9E%E7%B1%BB%E5%9E%8B.png);}
-    .card-type-2{background: url(https://huiji-public.huijistatic.com/ff14/uploads/1/1e/%E6%8B%82%E6%99%93%E7%B1%BB%E5%9E%8B.png);}
-    .card-type-3{background: url(https://huiji-public.huijistatic.com/ff14/uploads/d/df/%E5%85%BD%E4%BA%BA%E7%B1%BB%E5%9E%8B.png);}
-    .card-type-4{background: url(https://huiji-public.huijistatic.com/ff14/uploads/9/96/%E5%B8%9D%E5%9B%BD%E7%B1%BB%E5%9E%8B.png);}
+    .card-type-1{background: url(./vendor/%E8%9B%AE%E7%A5%9E%E7%B1%BB%E5%9E%8B.png);}
+    .card-type-2{background: url(./vendor/%E6%8B%82%E6%99%93%E7%B1%BB%E5%9E%8B.png);}
+    .card-type-3{background: url(./vendor/%E5%85%BD%E4%BA%BA%E7%B1%BB%E5%9E%8B.png);}
+    .card-type-4{background: url(./vendor/%E5%B8%9D%E5%9B%BD%E7%B1%BB%E5%9E%8B.png);}
     .card-number{width: 42px; height: 29px; position: absolute; bottom: 12px; left: 36px;}
     .card-number > div{position: absolute; width:14px; height:14px;}
     .card-number--top{top: 0; left: 14px;}
     .card-number--bottom{bottom: 0; left: 14px;}
     .card-number--left{top: 7px; left: 0;}
     .card-number--right{top: 7px; right: 0;}
-    .card-number--1{background: url(https://huiji-public.huijistatic.com/ff14/uploads/6/69/CardNum_1b.png);}
-    .card-number--2{background: url(https://huiji-public.huijistatic.com/ff14/uploads/2/21/CardNum_2b.png);}
-    .card-number--3{background: url(https://huiji-public.huijistatic.com/ff14/uploads/0/06/CardNum_3b.png);}
-    .card-number--4{background: url(https://huiji-public.huijistatic.com/ff14/uploads/7/76/CardNum_4b.png);}
-    .card-number--5{background: url(https://huiji-public.huijistatic.com/ff14/uploads/b/b3/CardNum_5b.png);}
-    .card-number--6{background: url(https://huiji-public.huijistatic.com/ff14/uploads/1/14/CardNum_6b.png);}
-    .card-number--7{background: url(https://huiji-public.huijistatic.com/ff14/uploads/e/e0/CardNum_7b.png);}
-    .card-number--8{background: url(https://huiji-public.huijistatic.com/ff14/uploads/9/98/CardNum_8b.png);}
-    .card-number--9{background: url(https://huiji-public.huijistatic.com/ff14/uploads/6/64/CardNum_9b.png);}
-    .card-number--10{background: url(https://huiji-public.huijistatic.com/ff14/uploads/6/64/CardNum_10b.png);}
+    .card-number--1{background: url(./vendor/CardNum_1b.png);}
+    .card-number--2{background: url(./vendor/CardNum_2b.png);}
+    .card-number--3{background: url(./vendor/CardNum_3b.png);}
+    .card-number--4{background: url(./vendor/CardNum_4b.png);}
+    .card-number--5{background: url(./vendor/CardNum_5b.png);}
+    .card-number--6{background: url(./vendor/CardNum_6b.png);}
+    .card-number--7{background: url(./vendor/CardNum_7b.png);}
+    .card-number--8{background: url(./vendor/CardNum_8b.png);}
+    .card-number--9{background: url(./vendor/CardNum_9b.png);}
+    .card-number--10{background: url(./vendor/CardNum_10b.png);}
     .card-detail--title{color: #c5bc98; font-size: 24px;}
     .card-detail--info{display: table-cell; vertical-align: top; padding-left: 20px;width: 100%;}
     .card-detail--icon{margin: 0 0 10px 20px;float: right;}
@@ -4086,7 +4086,7 @@ table.navbox+table.navbox{margin-top:-1px}
     .eorzea-map-trigger { cursor: pointer; }
     .eorzea-map-trigger.show-as-link { color: #77d1ff; }
     .eorzea-map-trigger.show-as-link:hover { background-color: rgba(119, 209, 255, 0.28); }
-    .eorzea-map-trigger.show-with-icon { background: url('//huiji-public.huijistatic.com/ff14/uploads/6/6c/Pos_prefix.png') no-repeat left; padding-left: 20px; }
+    .eorzea-map-trigger.show-with-icon { background: url('./vendor/Pos_prefix.png') no-repeat left; padding-left: 20px; }
     /*首页背景*/
     /* 还是等大佬上传一些更好看的背景吧...
     @media screen and (min-width: 1200px){
