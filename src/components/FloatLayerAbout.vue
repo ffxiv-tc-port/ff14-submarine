@@ -2,7 +2,7 @@
     <div class="about-block float-layer">
         <div class="float-layer-title">關於</div>
         <p>原作:{{ author }},以 MIT 授權發布。</p>
-        <p>台服版:資料以台服 7.20 遊戲檔為準重新產生,介面繁體中文化,並加入可調潛艇等級。</p>
+        <p>台服版:資料以台服 7.30 遊戲檔為準重新產生,介面繁體中文化,並加入可調潛艇等級。</p>
         <div class="float-layer-title">資料來源</div>
         <p>本工具使用了以下來源的資料</p>
         <table class="wikitable" style="text-align: left">

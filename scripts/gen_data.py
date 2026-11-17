@@ -3,7 +3,7 @@
 
 資料來源三路:
   1. 台服 EXD dump(權威):航點/海圖/零件/逐級獎勵/物品繁中名
-     D:/ffxiv-tc-port/exd-tc/7.20/{SubmarineExploration,SubmarineMap,SubmarinePart,SubmarineRank,Item}.csv
+     D:/ffxiv-tc-port/exd-tc/7.30/{SubmarineExploration,SubmarineMap,SubmarinePart,SubmarineRank,Item}.csv
   2. CN huijiwiki 線上資料快照(scripts/data/huiji_live_data.json):
      EXD 沒有的社群量測資料——探索/收集/恩惠門檻、掉落表、解鎖鏈、物品分類
   3. SubmarineTracker(艦隊內)Sectors.cs:門檻交叉驗證用
@@ -26,7 +26,7 @@ from pathlib import Path
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-EXD = 'D:/ffxiv-tc-port/exd-tc/7.20/'
+EXD = 'D:/ffxiv-tc-port/exd-tc/7.30/'
 ST_SECTORS = 'D:/ffxiv-tc-port/SubmarineTracker/SubmarineTracker/Data/Sectors.cs'
 ROOT = Path(__file__).resolve().parent.parent
 CN_SNAPSHOT = ROOT / 'scripts' / 'data' / 'huiji_live_data.json'
@@ -82,7 +82,7 @@ def main():
     sectors = [rid for rid, p in tc_pts.items() if not p['start']]
     print(f'台服航點:起點 {len(starts)} 個、航點 {len(sectors)} 個')
     assert len(starts) == 6, starts
-    assert len(sectors) == 123, len(sectors)
+    assert len(sectors) == 130, len(sectors)
 
     _, rank_rows = read_csv('SubmarineRank.csv')
     # 欄位: #,ExpToNext,Capacity,SurveillanceBonus,RetrievalBonus,SpeedBonus,RangeBonus,FavorBonus
@@ -97,7 +97,7 @@ def main():
     for rid in range(1, max_rank + 1):
         rank_bonus.setdefault(rid, [0, 0, 0, 0, 0, 0])
     print(f'台服等級上限 = {max_rank},滿級獎勵 = {rank_bonus[max_rank]}')
-    assert max_rank == 130, max_rank
+    assert max_rank == 135, max_rank
 
     _, part_rows = read_csv('SubmarinePart.csv')
     # 欄位: #,Class,Surveillance,Retrieval,Speed,Range,Favor,Slot,Rank,Components,RepairMaterials
@@ -152,7 +152,7 @@ def main():
         rid, t2, t3, norm, optim, favor = (int(g) for g in m.groups())
         st_bp[rid] = dict(mid=t2, high=t3, norm=norm, optim=optim, favor=favor)
     print(f'SubmarineTracker 門檻筆數 = {len(st_bp)}')
-    assert len(st_bp) >= 123, len(st_bp)
+    assert len(st_bp) >= 130, len(st_bp)
 
     # ---------- 物品名(台服 Item.csv,大檔逐列掃) ----------
     need_ids = set()
@@ -366,7 +366,7 @@ def main():
     data = dict(
         components=out_components,
         data_sources=[
-            dict(title='台服遊戲資料 7.20(航點/零件/等級獎勵/物品名)', desc='SubmarineExploration/SubmarinePart/SubmarineRank/Item', author='SQUARE ENIX', url=''),
+            dict(title='台服遊戲資料 7.30(航點/零件/等級獎勵/物品名)', desc='SubmarineExploration/SubmarinePart/SubmarineRank/Item', author='SQUARE ENIX', url=''),
             dict(title='部队潜水艇小工具(門檻/掉落/解鎖資料)', desc='原作工具與社群量測資料', author='Yuee', url='https://ff14.huijiwiki.com/wiki/%E9%83%A8%E9%98%9F%E6%BD%9C%E6%B0%B4%E8%89%87%E5%B0%8F%E5%B7%A5%E5%85%B7'),
             dict(title='SubmarineTracker 社群數據表(門檻交叉驗證)', desc='', author='Infiziert90', url='https://docs.google.com/spreadsheets/d/1eiuGRrQTjJ5n4ogybKOBxJRT7EiJLlX93fge-Z8MmD4'),
         ],
@@ -374,7 +374,7 @@ def main():
         max_filter_count=cn.get('max_filter_count', 300),
         max_rank=max_rank,
         max_rank_bonus=rank_bonus[max_rank],
-        # 真陣列(index=等級,0 位是零值)——dict 鍵 '1'..'130' 連續會被 convertLuaTable 誤轉成 0-indexed
+        # 真陣列(index=等級,0 位是零值)——dict 鍵 '1'..'135' 連續會被 convertLuaTable 誤轉成 0-indexed
         rank_bonus_table=[[0, 0, 0, 0, 0, 0]] + [rank_bonus[r] for r in range(1, max_rank + 1)],
         sea_name_map=out_seas,
         point_data=out_points,
