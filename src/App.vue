@@ -55,6 +55,9 @@ watch(layer, (newVal) => {
 });
 
 const selected = computed(() => submarineStore.selected);
+const lootPrefs = computed(() => [submarineStore.lootBasis, submarineStore.targets, submarineStore.rewardFilter]);
+
+watch(lootPrefs, () => submarineStore.saveLocalData(), { deep: true });
 
 watch(
     [map, speed, rank, sets, selected],

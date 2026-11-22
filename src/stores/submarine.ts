@@ -4,7 +4,7 @@ import { DEFAULT_MAP, LOCAL_STOREAGE_KEY } from '../constant/name';
 import { calcSetBaseStatus } from '../module/calcSetStatus';
 import { getSubmarineData } from '../module/getSubmarineData';
 import { SubmarineComponent } from '../objects/component';
-import type { DataSourceInfo, ItemInfo, PointInfo, SeaInfo } from '../types/ff14data';
+import type { DataSourceInfo, ItemInfo, PointInfo, SeaInfo, TcLootSummary } from '../types/ff14data';
 import type { routeInfo } from '../types/routeInfo';
 import type { SetStatus } from '../types/submarineSet';
 
@@ -26,6 +26,7 @@ export const useSubmarineStore = defineStore({
         waypointData: {} as Record<number, Record<number, PointInfo>>, // 航點資料
         itemDB: {} as Record<number, ItemInfo>, // 用到的物品資料
         rewards: {} as Record<number, string>, // 獎勵類型名稱
+        tcLoot: null as TcLootSummary | null, // 台服紀錄彙總涵蓋範圍
 
         maxRank: 0, // 船最大等級
         maxRankBonus: [] as number[], // 船最大等級時的屬性獎勵
@@ -37,6 +38,9 @@ export const useSubmarineStore = defineStore({
         speed: 100, // 目前預覽時使用的速度
         rank: 0, // 潛艇等級(0=未設定,視為滿級)
         sets: [] as SetInfo[], // 儲存的船體組合,每筆是 4 個零件編號和一個名字
+        lootBasis: -1, // 掉落估算用哪個配裝(sets 的索引),-1=不指定(以高監視主掉落機率標示)
+        targets: [] as number[], // 標成目標的道具
+        rewardFilter: 'valuable', // 獲得物品清單的篩選:valuable / all / target / common / cat:<分類>
 
         // 其他暫存資料
         layer: 0, // 浮層顯示
@@ -78,6 +82,14 @@ export const useSubmarineStore = defineStore({
             const bonus = state.rankBonusTable[this.currentRank];
             return bonus ? bonus : state.maxRankBonus;
         },
+        /** 掉落估算用的配裝;索引失效(配裝被刪)或配裝不完整時=null */
+        lootSet(state): SetStatus | null {
+            if (state.lootBasis < 0 || state.lootBasis >= state.sets.length) {
+                return null;
+            }
+            const status = calcSetBaseStatus(state.sets[state.lootBasis]);
+            return status.v ? status : null;
+        },
     },
     actions: {
         // 讀取/保存設定
@@ -89,6 +101,9 @@ export const useSubmarineStore = defineStore({
                 speed: this.speed,
                 rank: this.rank,
                 sets: this.sets,
+                lootBasis: this.lootBasis,
+                targets: this.targets,
+                rewardFilter: this.rewardFilter,
                 ver: this.version,
             };
             localStorage.setItem(LOCAL_STOREAGE_KEY, JSON.stringify(ls_data));
@@ -104,6 +119,9 @@ export const useSubmarineStore = defineStore({
             this.speed = ls_data.speed ? ls_data.speed : 100;
             this.rank = ls_data.rank ? ls_data.rank : 0;
             this.sets = ls_data.sets ? ls_data.sets : [];
+            this.lootBasis = typeof ls_data.lootBasis === 'number' ? ls_data.lootBasis : -1;
+            this.targets = Array.isArray(ls_data.targets) ? ls_data.targets : [];
+            this.rewardFilter = typeof ls_data.rewardFilter === 'string' ? ls_data.rewardFilter : 'valuable';
         },
         // 從網頁提供的原資料中初始化
         initAllData() {
@@ -133,6 +151,7 @@ export const useSubmarineStore = defineStore({
                 return maps;
             })();
             this.rewards = allData.reward_category_map;
+            this.tcLoot = allData.tc_loot ? allData.tc_loot : null;
             this.maxRank = allData.max_rank;
             this.maxRankBonus = allData.max_rank_bonus;
             this.rankBonusTable = allData.rank_bonus_table ? allData.rank_bonus_table : [];
@@ -247,7 +266,26 @@ export const useSubmarineStore = defineStore({
         deleteSet(index: number) {
             if (this.sets.length >= index) {
                 this.sets.splice(index, 1);
+                if (this.lootBasis === index) {
+                    this.lootBasis = -1;
+                } else if (this.lootBasis > index) {
+                    this.lootBasis -= 1;
+                }
             }
+        },
+        setLootBasis(index: number) {
+            this.lootBasis = index;
+        },
+        toggleTarget(itemId: number) {
+            const index = this.targets.indexOf(itemId);
+            if (index > -1) {
+                this.targets.splice(index, 1);
+            } else {
+                this.targets.push(itemId);
+            }
+        },
+        setRewardFilter(filter: string) {
+            this.rewardFilter = filter;
         },
     },
 });

@@ -11,6 +11,9 @@ FFXIV 公會潛水艇航線與配裝工具的台服(繁體中文)移植版:規�
 - **圖示與海圖鏡像進 repo**:物品圖示、海圖與介面素材放在 `public/` 與 `src/assets/`,不再熱連灰機 CDN。
 - 介面繁體中文化,術語對齊台服官方譯名(海域名、零件名、屬性名)。
 - 修正兩個原作 bug:沿途目的地的收集需求兩格都顯示「良好」門檻;搜尋器「已加入」判定永遠不成立。
+- **掉落機率與目標道具**:「獲得物品」在每個航點旁標出機率(沒選配裝=高監視每趟主掉落機率;選了配裝=該配裝每趟期望數量),
+  可切換全部道具/分類,可把道具標成目標(航點清單、海圖、最短路線情報會標出目標的期望);機率來自全球社群紀錄,
+  並以台服 SubmarineTracker 紀錄驗證(結果見 `scripts/validate_tc_loot.py`)。
 
 ## 開發
 
@@ -30,11 +33,15 @@ python scripts/gen_data.py
 與 SubmarineTracker 門檻表,驗證全過才會改寫 `public/data.js`;任何一致性檢查失敗都會中止不輸出。
 物品圖示用 `scripts/fetch_assets.py` 下載到 `public/icons/`。
 
+掉落機率:社群試算表快照在 `scripts/data/gs_items.csv`、`gs_sectors.csv`;台服觀測次數在 `scripts/data/tc_loot_stats.json`,
+由 `python scripts/gen_tc_loot_stats.py [--db <submarine-sqlite.db>]` 從 SubmarineTracker 資料庫產生
+(唯讀開啟,只輸出彙總次數、時間只到月,不含公會/角色/潛水艇等識別資料)。`python scripts/validate_tc_loot.py`
+印出台服紀錄對社群機率的交叉驗證表。
+
 台服跳版本後的更新順序:重新 dump EXD → 把腳本與「關於」頁(`src/components/FloatLayerAbout.vue`)裡寫死的版本改成新版 →
 需要時更新 CN 快照(抓灰機工具頁的 `wgHuijiVars.DATA`)→ 重跑產生器。
 
 ## 部署
 
 `deploy-pages` workflow 在推上 `main` 時建置並發佈到 GitHub Pages(資產走相對路徑,可放在子路徑下)。
-org 改為 private 之後這個 repo 目前沒有啟用中的 Pages 站台;要用時可 `yarn build` 後以任一靜態伺服器
-提供 `dist/`。`index.html` 設了 `no-referrer`,是給仍放在灰機 CDN 上的少數背景圖用的。
+本機預覽可 `yarn build` 後以任一靜態伺服器提供 `dist/`。`index.html` 設了 `no-referrer`,是給仍放在灰機 CDN 上的少數背景圖用的。
