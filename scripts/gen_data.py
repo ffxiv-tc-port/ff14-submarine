@@ -5,10 +5,12 @@
   1. 台服 EXD dump(權威):航點/海圖/零件/逐級獎勵/物品繁中名
      D:/ffxiv-tc-port/exd-tc/7.30/{SubmarineExploration,SubmarineMap,SubmarinePart,SubmarineRank,Item}.csv
   2. CN huijiwiki 線上資料快照(scripts/data/huiji_live_data.json):
-     EXD 沒有的社群量測資料——探索/收集/恩惠門檻、掉落表、解鎖鏈、物品分類
-  3. SubmarineTracker(艦隊內)Sectors.cs:門檻交叉驗證用
-  4. 全球社群試算表快照(scripts/data/gs_items.csv、gs_sectors.csv):完整掉落表、tier 機率、tier 內佔比、數量
-  5. 台服 SubmarineTracker 紀錄彙總(scripts/data/tc_loot_stats.json,gen_tc_loot_stats.py 產生):觀測次數
+     EXD 沒有的社群量測資料——掉落表、解鎖鏈、物品分類;門檻只當舊值對照
+  3. SubmarineTracker(艦隊內)Sectors.cs:舊門檻對照(與 CN 同一份,取整到 5 的倍數)
+  4. 全球社群試算表快照(scripts/data/gs_items.csv、gs_sectors.csv):探索/收集/恩惠門檻(實測 BP)、
+     完整掉落表、tier 機率、tier 內佔比、數量
+  5. 台服 SubmarineTracker 紀錄彙總(scripts/data/tc_loot_stats.json,gen_tc_loot_stats.py 產生):
+     觀測次數;各等級出現過的屬性值區間用來驗門檻,矛盾就不輸出
 
 實證過的公式(對 CN 全量回歸命中):
   range    = floor(3D距離 × 0.035)   …… 航行距離消耗
@@ -47,6 +49,18 @@ REWARD_CATEGORY_TC = {
 }
 
 PART_SUFFIXES = ['級船體', '級船尾', '級船首', '級艦橋']
+
+BP_KEYS = ('mid', 'high', 'norm', 'optim', 'favor')
+# 門檻鍵 -> (社群 BP 欄, 低一級觀測最大值欄, 達標觀測最小值欄)
+GS_BP_COLS = {
+    'mid': ('Mid surv BP', 'Low surv max', 'Mid surv min'),
+    'high': ('High surv BP', 'Mid surv max', 'High surv min'),
+    'norm': ('Normal ret BP', 'Poor ret max', 'Normal ret min'),
+    'optim': ('Optimal ret BP', 'Normal ret max', 'Optimal ret min'),
+    'favor': ('Favor BP', 'Favor no max', 'Favor yes min'),
+}
+TC_LEVEL_NAME = {'surv': ('低監視', '中監視', '高監視'), 'ret': ('差回收', '普通回收', '最佳回收')}
+TC_FAV_NAME = ('有第二件', '屬性夠沒觸發')
 
 
 def lua_arr(x):
@@ -345,8 +359,45 @@ def main():
         return dict(v=obs['visits'], sv=obs['surv'], h=obs['tier']['high'], f=obs['fav'],
                     low=tc_items.get('low', {}), mid=tc_items.get('mid', {}), high=tc_items.get('high', {}))
 
-    # 門檻:CN 為主、SubmarineTracker 交叉驗證
+    def sheet_bp_for(rid, fallback):
+        """社群 BP;須落在社群自己的觀測區間內(低一級最大值 < BP ≤ 高一級最小值,最小值 0=沒觀測)。"""
+        sec = sheet_sector[sheet_name_for(rid)]
+        out = {}
+        for k, (bp_col, below_col, above_col) in GS_BP_COLS.items():
+            try:
+                v, below, above = int(sec[bp_col]), int(sec[below_col] or 0), int(sec[above_col] or 0)
+            except ValueError:
+                fail.append(f'row {rid} 社群 {bp_col} 不是整數: {sec[bp_col]!r}')
+                out[k] = fallback[k]
+                continue
+            if v <= below or (above > 0 and v > above):
+                fail.append(f'row {rid} 社群 {bp_col}={v} 不在自己的觀測區間 ({below}, {above}]')
+            out[k] = v
+        if not (0 < out['mid'] < out['high'] and 0 < out['norm'] < out['optim'] and out['favor'] > 0):
+            fail.append(f'row {rid} 社群門檻順序異常: {out}')
+        return out
+
+    def check_tc_thresholds(rid, bp):
+        """台服紀錄的每個等級/恩惠結果的屬性值區間不可跨過門檻;區間是逐筆最小/最大,等同逐筆檢查。"""
+        obs = tc_sectors.get(rid)
+        if not obs:
+            return
+        st = obs['stat']
+        for kind, lo, hi in (('surv', 'mid', 'high'), ('ret', 'norm', 'optim')):
+            cuts = [None, bp[lo], bp[hi]]
+            for lvl, rng in enumerate(st[kind]):
+                if rng and ((lvl > 0 and rng[0] < cuts[lvl]) or (lvl < 2 and rng[1] >= cuts[lvl + 1])):
+                    fail.append(f'台服紀錄與門檻矛盾 row {rid}:{TC_LEVEL_NAME[kind][lvl]}的趟次屬性 {rng[0]}~{rng[1]},'
+                                f'門檻 {lo}={bp[lo]}、{hi}={bp[hi]}')
+        fv = st['fav']
+        for k in (0, 1):
+            if fv[k] and fv[k][0] < bp['favor']:
+                fail.append(f'台服紀錄與門檻矛盾 row {rid}:恩惠{TC_FAV_NAME[k]}的趟次屬性最低 {fv[k][0]} < 門檻 {bp["favor"]}')
+        if fv[2] and fv[2][1] >= bp['favor']:
+            fail.append(f'台服紀錄與門檻矛盾 row {rid}:恩惠屬性不足的趟次屬性最高 {fv[2][1]} >= 門檻 {bp["favor"]}')
+
     bp_mismatch = 0
+    bp_changed = []  # 社群 BP 與舊值(CN/SubmarineTracker)不同的航點
     sheet_covered = 0  # 有社群總表掉落的航點數
     cn_extra_total = 0  # CN 精選品不在總表的筆數(交叉檢查指標)
     out_points = []
@@ -363,22 +414,29 @@ def main():
             if cn_code and cn_code != code:
                 fail.append(f'row {rid} 代號不一致: TC={code} CN={cn_code}')
 
-        # statReq:CN 快照
+        # statReq:社群表實測 BP 為準;CN 快照與 SubmarineTracker 只當舊值對照(兩者是取整到 5 倍數的同一份)
         cn_sr = cn_p.get('statReq') or {}
-        sr = dict(
+        cn_flat = dict(
             favor=(cn_sr.get('favor') or 0),
-            retrieval=dict(norm=(cn_sr.get('retrieval') or {}).get('norm', 0),
-                           optim=(cn_sr.get('retrieval') or {}).get('optim', 0)),
-            surveillance=dict(mid=(cn_sr.get('surveillance') or {}).get('mid', 0),
-                              high=(cn_sr.get('surveillance') or {}).get('high', 0)))
+            norm=(cn_sr.get('retrieval') or {}).get('norm', 0),
+            optim=(cn_sr.get('retrieval') or {}).get('optim', 0),
+            mid=(cn_sr.get('surveillance') or {}).get('mid', 0),
+            high=(cn_sr.get('surveillance') or {}).get('high', 0))
+        flat = dict(cn_flat) if p['start'] else sheet_bp_for(rid, cn_flat)
+        sr = dict(
+            favor=flat['favor'],
+            retrieval=dict(norm=flat['norm'], optim=flat['optim']),
+            surveillance=dict(mid=flat['mid'], high=flat['high']))
         if not p['start']:
-            assert sr['favor'] > 0, f'row {rid} 缺 CN 門檻資料'
+            assert cn_flat['favor'] > 0, f'row {rid} 缺 CN 門檻資料'
             bp = st_bp.get(rid)
-            if bp and (bp['mid'] != sr['surveillance']['mid'] or bp['high'] != sr['surveillance']['high']
-                       or bp['norm'] != sr['retrieval']['norm'] or bp['optim'] != sr['retrieval']['optim']
-                       or bp['favor'] != sr['favor']):
+            if bp and any(bp[k] != cn_flat[k] for k in BP_KEYS):
                 bp_mismatch += 1
-                print(f'⚠️ row {rid} 門檻 CN vs SubmarineTracker 不一致: CN={sr} ST={bp}')
+                print(f'⚠️ row {rid} 門檻 CN vs SubmarineTracker 不一致: CN={cn_flat} ST={bp}')
+            changed = [f'{k} {cn_flat[k]}→{flat[k]}' for k in BP_KEYS if cn_flat[k] != flat[k]]
+            if changed:
+                bp_changed.append(f'[{rid}] {tc_maps[p["map"]]} {code} {name}:' + '、'.join(changed))
+            check_tc_thresholds(rid, flat)
 
         # 掉落:社群總表為主(tier 歸屬以它的量測為準),CN 精選品若總表沒有補在最前
         sl = sheet_loot_for(rid)
@@ -426,7 +484,10 @@ def main():
             out_points[-1]['loot'] = loot
         if tc_out:
             out_points[-1]['tc'] = tc_out
-    print(f'航點輸出 {len(out_points)} 筆;門檻與 SubmarineTracker 不一致 {bp_mismatch} 筆')
+    print(f'航點輸出 {len(out_points)} 筆;舊門檻 CN 與 SubmarineTracker 不一致 {bp_mismatch} 筆')
+    print(f'門檻改用社群實測 BP:{len(bp_changed)} 個航點與舊值不同(台服紀錄已逐等級驗過)')
+    for line in bp_changed:
+        print('  ', line)
     n_loot = sum(len(pt['loot'][t]) for pt in out_points if 'loot' in pt for t in ('low', 'mid', 'high'))
     n_drop = sum(len(pt['drop'][t]) for pt in out_points if not pt['start'] for t in ('low', 'mid', 'high'))
     print(f'掉落機率:{n_loot}/{n_drop} 筆掉落有社群機率;台服觀測涵蓋 {len(tc_used)} 航點')
@@ -461,10 +522,10 @@ def main():
         components=out_components,
         data_sources=[
             dict(title='台服遊戲資料 7.30(航點/零件/等級獎勵/物品名)', desc='SubmarineExploration/SubmarinePart/SubmarineRank/Item', author='SQUARE ENIX', url=''),
-            dict(title='部队潜水艇小工具(門檻/掉落/解鎖資料)', desc='原作工具與社群量測資料', author='Yuee', url='https://ff14.huijiwiki.com/wiki/%E9%83%A8%E9%98%9F%E6%BD%9C%E6%B0%B4%E8%89%87%E5%B0%8F%E5%B7%A5%E5%85%B7'),
-            dict(title='SubmarineTracker 社群數據表(完整掉落表/掉落機率/數量;門檻交叉驗證)', desc='全球玩家上傳的潛水艇紀錄;tier 機率、tier 內佔比、各回收等級平均數量', author='Infiziert90', url='https://docs.google.com/spreadsheets/d/1eiuGRrQTjJ5n4ogybKOBxJRT7EiJLlX93fge-Z8MmD4'),
+            dict(title='部队潜水艇小工具(掉落/解鎖資料)', desc='原作工具與社群量測資料', author='Yuee', url='https://ff14.huijiwiki.com/wiki/%E9%83%A8%E9%98%9F%E6%BD%9C%E6%B0%B4%E8%89%87%E5%B0%8F%E5%B7%A5%E5%85%B7'),
+            dict(title='SubmarineTracker 社群數據表(探索/收集/恩惠門檻;完整掉落表/掉落機率/數量)', desc='全球玩家上傳的潛水艇紀錄;門檻用實測 BP(以台服紀錄驗過),tier 機率、tier 內佔比、各回收等級平均數量', author='Infiziert90', url='https://docs.google.com/spreadsheets/d/1eiuGRrQTjJ5n4ogybKOBxJRT7EiJLlX93fge-Z8MmD4'),
             dict(title='台服 SubmarineTracker 紀錄(掉落驗證/台服觀測次數)',
-                 desc=f"{tc_stats['records']} 筆航點紀錄,{tc_stats['period']['from']}~{tc_stats['period']['to']},{len(tc_sectors)} 個航點;只用彙總次數",
+                 desc=f"{tc_stats['records']} 筆航點紀錄,{tc_stats['period']['from']}~{tc_stats['period']['to']},{len(tc_sectors)} 個航點;只用彙總次數與屬性值區間(驗門檻)",
                  author='台服版維護者', url=''),
         ],
         tc_loot=dict(records=tc_stats['records'], sectors=len(tc_sectors),
@@ -478,7 +539,7 @@ def main():
         sea_name_map=out_seas,
         point_data=out_points,
         reward_category_map=REWARD_CATEGORY_TC,
-        tool_version=102,
+        tool_version=103,
     )
 
     if fail:

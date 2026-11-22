@@ -15,6 +15,11 @@
             沒有發現台服獨有的掉落;各航點的台服觀測次數列在滑鼠提示裡。</p
         >
         <p class="about-loot" v-else>台服紀錄:這份資料沒有附台服紀錄彙總。</p>
+        <div class="float-layer-title">探索/收集/恩惠門檻</div>
+        <p class="about-loot"
+            >取社群數據表的實測門檻(BP)。原作與 SubmarineTracker 的門檻是同一份、取整到 5 的倍數,在翠浪海、賽蓮海、紫礁海與南蒼茫洋共
+            29 個航點比實測高 1~4 點;改用實測值後,每個航點的台服紀錄(各監視/回收等級與恩惠結果出現過的屬性值)都和門檻沒有矛盾。</p
+        >
         <div class="float-layer-title">資料來源</div>
         <p>本工具使用了以下來源的資料</p>
         <table class="wikitable" style="text-align: left">
