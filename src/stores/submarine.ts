@@ -5,6 +5,7 @@ import { calcSetBaseStatus } from '../module/calcSetStatus';
 import { getSubmarineData } from '../module/getSubmarineData';
 import { SubmarineComponent } from '../objects/component';
 import type { DataSourceInfo, ItemInfo, PointInfo, SeaInfo, TcLootSummary } from '../types/ff14data';
+import type { RecommendObjective } from '../module/recommendRoute';
 import type { routeInfo } from '../types/routeInfo';
 import type { SetStatus } from '../types/submarineSet';
 
@@ -41,6 +42,8 @@ export const useSubmarineStore = defineStore({
         lootBasis: -1, // 掉落估算用哪個配裝(sets 的索引),-1=不指定(以高監視主掉落機率標示)
         targets: [] as number[], // 標成目標的道具
         rewardFilter: 'valuable', // 獲得物品清單的篩選:valuable / all / target / common / cat:<分類>
+        excluded: [] as number[], // 推薦路線時排除的航點(使用者自己排除未解鎖的)
+        recommendObjective: 'trip' as RecommendObjective, // 推薦路線的目標:每趟 / 每小時期望數量
 
         // 其他暫存資料
         layer: 0, // 浮層顯示
@@ -104,6 +107,8 @@ export const useSubmarineStore = defineStore({
                 lootBasis: this.lootBasis,
                 targets: this.targets,
                 rewardFilter: this.rewardFilter,
+                excluded: this.excluded,
+                recommendObjective: this.recommendObjective,
                 ver: this.version,
             };
             localStorage.setItem(LOCAL_STOREAGE_KEY, JSON.stringify(ls_data));
@@ -122,6 +127,8 @@ export const useSubmarineStore = defineStore({
             this.lootBasis = typeof ls_data.lootBasis === 'number' ? ls_data.lootBasis : -1;
             this.targets = Array.isArray(ls_data.targets) ? ls_data.targets : [];
             this.rewardFilter = typeof ls_data.rewardFilter === 'string' ? ls_data.rewardFilter : 'valuable';
+            this.excluded = Array.isArray(ls_data.excluded) ? ls_data.excluded : [];
+            this.recommendObjective = ls_data.recommendObjective === 'hour' ? 'hour' : 'trip';
         },
         // 從網頁提供的原資料中初始化
         initAllData() {
@@ -190,6 +197,18 @@ export const useSubmarineStore = defineStore({
                 this.map = 1;
             }
             this.selected = [];
+        },
+        /** 直接切到指定海域;換圖時清空已選航點(與 changeMap 相同),點目前這張不動 */
+        setMap(mapId: number) {
+            if (mapId === this.map || !this.maps[mapId]) {
+                return;
+            }
+            this.map = mapId;
+            this.selected = [];
+        },
+        /** 套用推薦路線:整組取代目前選取 */
+        setSelected(ids: number[]) {
+            this.selected = ids.slice(0, 5);
         },
         setLayer(layerId: number) {
             this.layer = layerId;
@@ -286,6 +305,20 @@ export const useSubmarineStore = defineStore({
         },
         setRewardFilter(filter: string) {
             this.rewardFilter = filter;
+        },
+        toggleExcluded(pointId: number) {
+            const index = this.excluded.indexOf(pointId);
+            if (index > -1) {
+                this.excluded.splice(index, 1);
+            } else {
+                this.excluded.push(pointId);
+            }
+        },
+        clearExcluded(pointIds: number[]) {
+            this.excluded = this.excluded.filter((id) => !pointIds.includes(id));
+        },
+        setRecommendObjective(objective: RecommendObjective) {
+            this.recommendObjective = objective;
         },
     },
 });

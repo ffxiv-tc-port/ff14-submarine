@@ -25,7 +25,17 @@
         <div class="explore-map">
             <table class="wikitable">
                 <tr
-                    ><th :colspan="2">{{ map_name }}</th></tr
+                    ><th class="map-tabs"
+                        ><span
+                            v-for="tab in mapTabs"
+                            :key="tab.id"
+                            class="map-tab"
+                            :class="{ active: tab.id === submarineStore.map, 'rank-short': tab.rankShort }"
+                            :title="tab.title"
+                            @click="setMap(tab.id)"
+                            >{{ tab.name }}</span
+                        ></th
+                    ></tr
                 >
             </table>
             <div class="sea-map" :class="'map' + submarineStore.map">
@@ -49,7 +59,7 @@
             </div>
             <div class="ff14-btn-group" style="margin-top: 1em; text-align: center; width: 100%">
                 <div class="ff14-btn" @click.prevent.stop="resetSelected()">重置</div>
-                <div class="ff14-btn" @click.prevent.stop="changeMap()">切換地圖</div>
+                <div class="ff14-btn" :title="recommendTitle" @click.prevent.stop="openRecommend()">依目標推薦路線</div>
             </div>
         </div>
         <div class="explore-drop">
@@ -132,9 +142,35 @@ import ItemLink from './ItemLink.vue';
 
 const submarineStore = useSubmarineStore();
 
-const map_name = computed(() =>
-    submarineStore.maps[submarineStore.map] ? submarineStore.maps[submarineStore.map].cn : '未知地圖',
+/** 海域分頁:點了直接切換;等級不到的海域照舊可切(原本的輪替也不擋),只在提示與顏色上標出 */
+const mapTabs = computed(() =>
+    Object.keys(submarineStore.maps).map((key) => {
+        const id = Number(key);
+        const sea = submarineStore.maps[id];
+        const points = Object.values(submarineStore.waypointData[id] || {});
+        const ranks = points.map((p) => p.rankReq);
+        const minRank = ranks.length ? Math.min(...ranks) : 0;
+        const maxRank = ranks.length ? Math.max(...ranks) : 0;
+        const rankShort = minRank > submarineStore.currentRank;
+        const lines = [`${sea.cn}(${sea.en}):${points.length} 個航點,航點等級 ${minRank}~${maxRank}`];
+        if (rankShort) {
+            lines.push(`目前潛艇等級 ${submarineStore.currentRank},還不能去這張圖的任何航點`);
+        }
+        if (submarineStore.targets.length > 0) {
+            const hit = points.filter((p) => submarineStore.targets.some((t) => itemTiers(p, t).length > 0)).length;
+            lines.push(hit > 0 ? `目標道具:${hit} 個航點會掉` : '目標道具:這張圖都不掉');
+        }
+        if (id !== submarineStore.map && submarineStore.selected.length > 0) {
+            lines.push('切換會清空目前選的航點');
+        }
+        return { id, name: sea.cn, rankShort, title: lines.join('\n') };
+    }),
 );
+
+const recommendTitle =
+    '從目前地圖挑最多 5 個航點,讓 ☆ 目標道具的期望數量(每趟或每小時)最大,點結果套用。' +
+    '\n工具不知道你解鎖了哪些航點,未解鎖的請在推薦視窗裡自己排除。';
+
 const currentWarpoints = computed(() => submarineStore.currentWarpoints);
 
 const rewards = computed(() =>
@@ -260,8 +296,11 @@ function toggleWP(point_id: number) {
 function resetSelected() {
     submarineStore.resetSelected();
 }
-function changeMap() {
-    submarineStore.changeMap();
+function setMap(mapId: number) {
+    submarineStore.setMap(mapId);
+}
+function openRecommend() {
+    submarineStore.setLayer(6);
 }
 function toggleTarget(itemId: number) {
     submarineStore.toggleTarget(itemId);
@@ -312,6 +351,39 @@ function onBasisChange(e: Event) {
 // 海圖(圖檔已鏡像進 src/assets/maps,由 vite 打包)
 .explore-map {
     margin: 0 1em;
+    width: 350px;
+}
+
+th.map-tabs {
+    padding: 0.2em 0 !important;
+    white-space: nowrap;
+
+    .map-tab {
+        display: inline-block;
+        padding: 0 0.35em;
+        color: #8a8a8a;
+        font-weight: normal;
+        font-size: 13px;
+        cursor: pointer;
+
+        & + .map-tab {
+            border-left: 1px solid #555;
+        }
+
+        &:hover {
+            color: #fc3;
+        }
+
+        &.rank-short {
+            opacity: 0.5;
+        }
+
+        &.active {
+            color: #bda45b;
+            font-weight: 700;
+            opacity: 1;
+        }
+    }
 }
 
 .sea-map {

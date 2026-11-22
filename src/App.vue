@@ -9,6 +9,7 @@
         <float-layer-set-speed v-if="layer === 3" />
         <float-layer-add-waypoint v-if="layer === 4" />
         <float-layer-about v-if="layer === 5" />
+        <float-layer-recommend v-if="layer === 6" />
         <div class="float-layer-bg"></div>
     </div>
 </template>
@@ -17,6 +18,7 @@
 import { computed, onMounted, watch } from 'vue';
 import FloatLayerAbout from './components/FloatLayerAbout.vue';
 import FloatLayerAddWaypoint from './components/FloatLayerAddWaypoint.vue';
+import FloatLayerRecommend from './components/FloatLayerRecommend.vue';
 import FloatLayerSetEditor from './components/FloatLayerSetEditor.vue';
 import FloatLayerSetFinder from './components/FloatLayerSetFinder.vue';
 import FloatLayerSetSpeed from './components/FloatLayerSetSpeed.vue';
@@ -55,7 +57,13 @@ watch(layer, (newVal) => {
 });
 
 const selected = computed(() => submarineStore.selected);
-const lootPrefs = computed(() => [submarineStore.lootBasis, submarineStore.targets, submarineStore.rewardFilter]);
+const lootPrefs = computed(() => [
+    submarineStore.lootBasis,
+    submarineStore.targets,
+    submarineStore.rewardFilter,
+    submarineStore.excluded,
+    submarineStore.recommendObjective,
+]);
 
 watch(lootPrefs, () => submarineStore.saveLocalData(), { deep: true });
 
@@ -242,6 +250,10 @@ ul.hor-waypoints-list {
     }
 
     &.about-block {
+        width: 50em;
+    }
+
+    &.recommend-block {
         width: 50em;
     }
 

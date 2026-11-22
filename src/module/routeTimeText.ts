@@ -1,3 +1,8 @@
+/** 整趟航行分鐘數(含基礎 12 小時),與下面兩個文字函式同一算式 */
+export function routeMinutes(time: number, speed: number) {
+    return time / speed + 12 * 60;
+}
+
 export function getRouteTimeCostText(time: number, speed: number) {
     let min = time / speed + 12 * 60; // 航行基礎時間 12 小時
     const day = min >= 24 * 60 ? Math.floor(min / (24 * 60)) : 0;
