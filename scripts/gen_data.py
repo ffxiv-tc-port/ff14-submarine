@@ -7,6 +7,8 @@
   2. CN huijiwiki 線上資料快照(scripts/data/huiji_live_data.json):
      EXD 沒有的社群量測資料——探索/收集/恩惠門檻、掉落表、解鎖鏈、物品分類
   3. SubmarineTracker(艦隊內)Sectors.cs:門檻交叉驗證用
+  4. 全球社群試算表快照(scripts/data/gs_items.csv、gs_sectors.csv):完整掉落表、tier 機率、tier 內佔比、數量
+  5. 台服 SubmarineTracker 紀錄彙總(scripts/data/tc_loot_stats.json,gen_tc_loot_stats.py 產生):觀測次數
 
 實證過的公式(對 CN 全量回歸命中):
   range    = floor(3D距離 × 0.035)   …… 航行距離消耗
@@ -29,6 +31,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 EXD = 'D:/ffxiv-tc-port/exd-tc/7.30/'
 ST_SECTORS = 'D:/ffxiv-tc-port/SubmarineTracker/SubmarineTracker/Data/Sectors.cs'
 ROOT = Path(__file__).resolve().parent.parent
+TC_STATS = ROOT / 'scripts' / 'data' / 'tc_loot_stats.json'
 CN_SNAPSHOT = ROOT / 'scripts' / 'data' / 'huiji_live_data.json'
 OUT = ROOT / 'public' / 'data.js'
 
@@ -51,6 +54,12 @@ def lua_arr(x):
     if isinstance(x, dict):
         return [x[k] for k in sorted(x, key=int)]
     return x
+
+
+def pct(x):
+    """社群表的 '12.34%' → 0.1234;空白或非百分比回 None。"""
+    x = (x or '').strip()
+    return round(float(x[:-1]) / 100, 4) if x.endswith('%') else None
 
 
 def read_csv(name):
@@ -125,26 +134,49 @@ def main():
     gs_tier = {'T1': 'low', 'T2': 'mid', 'T3': 'high'}
     en2id = json.load(open(ROOT / 'scripts' / 'data' / 'item_en_to_id.json', encoding='utf-8'))
     mapletter_to_sector = {}
+    sheet_sector = {}  # 社群航點名 -> {欄名: 值}
     with open(ROOT / 'scripts' / 'data' / 'gs_sectors.csv', encoding='utf-8') as f:
-        for r in list(csv.reader(f))[1:]:
+        srows = list(csv.reader(f))
+        for r in srows[1:]:
             if len(r) > 2 and r[0].strip():
                 mapletter_to_sector[(r[2].strip(), r[1].strip())] = r[0].strip()
+                sheet_sector[r[0].strip()] = dict(zip(srows[0], r))
     sheet_loot = {}
+    sheet_item_stat = {}  # 社群航點名 -> tier(low/mid/high) -> item_id -> 機率資料
     with open(ROOT / 'scripts' / 'data' / 'gs_items.csv', encoding='utf-8') as f:
-        for r in list(csv.reader(f))[1:]:
+        irows = list(csv.reader(f))
+        for r in irows[1:]:
             if len(r) > 3 and r[0].strip() and r[2].strip():
                 iid = en2id[r[2].strip().lower()]
-                sheet_loot.setdefault(r[0].strip(), {'low': [], 'mid': [], 'high': []})[gs_tier[r[3].strip()]].append(iid)
+                tier = gs_tier[r[3].strip()]
+                sheet_loot.setdefault(r[0].strip(), {'low': [], 'mid': [], 'high': []})[tier].append(iid)
+                c = dict(zip(irows[0], r))
+                stat = dict(
+                    s=pct(c['High surv drop chance (within tier)']),
+                    o=pct(c['Overall drop chance (within tier)']),
+                    q=[round(float(c[k + ' avg']), 2) for k in ('Poor', 'Normal', 'Optimal')],
+                    n=int(c['Total drops recorded']))
+                if stat['s'] is None or stat['o'] is None:
+                    fail.append(f'社群掉落 {r[0]} {r[2]} {r[3]} 機率欄缺值')
+                sheet_item_stat.setdefault(r[0].strip(), {'low': {}, 'mid': {}, 'high': {}})[tier][iid] = stat
     en_maps = [s['en'] for s in cn_seas]  # index = map-1
     print(f'社群總表:{len(sheet_loot)} 航點的完整掉落、{len(en2id)} 個物品名對照')
 
-    def sheet_loot_for(rid):
+    def sheet_name_for(rid):
         p = tc_pts[rid]
         if p['start']:
             return None
         letter = p['dest'].split(IDEOGRAPHIC_SPACE, 1)[0]
-        sname = mapletter_to_sector.get((en_maps[p['map'] - 1], letter))
+        return mapletter_to_sector.get((en_maps[p['map'] - 1], letter))
+
+    def sheet_loot_for(rid):
+        sname = sheet_name_for(rid)
         return sheet_loot.get(sname) if sname else None
+
+    # ---------- 台服紀錄彙總(只有次數) ----------
+    tc_stats = json.load(open(TC_STATS, encoding='utf-8'))
+    tc_sectors = {int(k): v for k, v in tc_stats['sectors'].items()}
+    print(f"台服紀錄:{tc_stats['records']} 筆、{len(tc_sectors)} 航點、{tc_stats['period']['from']}~{tc_stats['period']['to']}")
 
     # ---------- SubmarineTracker 門檻(交叉驗證) ----------
     st_bp = {}
@@ -264,6 +296,55 @@ def main():
     print(f'距離公式回歸:{reg_total} 對,失配 {reg_bad}')
     assert reg_total > 2000 and reg_bad == 0, (reg_total, reg_bad)
 
+    # ---------- 掉落機率(社群)與台服觀測次數 ----------
+    # 欄位語意寫在 src/types/ff14data.ts 的 PointLoot / PointTcObs;不寫 null(convertLuaTable 會對 null 取 keys)
+    def build_loot(rid, drop):
+        sname = sheet_name_for(rid)
+        sec = sheet_sector[sname]
+        def procs(keys):
+            vals = [pct(sec[k]) for k in keys]
+            if any(v is None for v in vals) or abs(sum(vals) - 1) > 0.005:
+                fail.append(f'row {rid} {sname} tier 機率異常 {keys}: {vals}')
+            return vals
+        loot = dict(
+            hp=procs([f'T{t} FD high surv proc' for t in (1, 2, 3)]),
+            hd=procs([f'T{t} DD high surv proc' for t in (1, 2, 3)]),
+            mp=procs([f'T{t} FD mid surv proc' for t in (1, 2)]),
+            md=procs([f'T{t} DD mid surv proc' for t in (1, 2)]),
+            fp=pct(sec['Favor proc chance']),
+            gn=int(sec['High surveillance hits']))
+        if loot['fp'] is None:
+            fail.append(f'row {rid} {sname} 缺恩惠觸發率')
+            loot['fp'] = 0
+        stats = sheet_item_stat[sname]
+        for tier in ('low', 'mid', 'high'):
+            tier_stat = {}
+            for iid in drop[tier]:
+                if iid in stats[tier]:
+                    tier_stat[str(iid)] = dict(stats[tier][iid])
+            for key in ('s', 'o'):
+                total = sum(st[key] for st in stats[tier].values())
+                if stats[tier] and abs(total - 1) > 0.02:
+                    fail.append(f'row {rid} {sname} {tier} tier 內佔比({key})加總 {total:.4f}')
+            loot[tier] = tier_stat
+        return loot
+
+    tc_used = set()
+
+    def build_tc(rid, drop):
+        obs = tc_sectors.get(rid)
+        if not obs:
+            return None
+        tc_used.add(rid)
+        tc_items = {}
+        for tier, tkey in (('low', 'T1'), ('mid', 'T2'), ('high', 'T3')):
+            for iid, it in obs['items'][tkey].items():
+                if int(iid) not in drop[tier]:
+                    fail.append(f'row {rid} 台服觀測到掉落表沒有的 {tkey} 道具 {iid}({sum(it["n"])} 次)')
+                tc_items.setdefault(tier, {})[iid] = it['surv']
+        return dict(v=obs['visits'], sv=obs['surv'], h=obs['tier']['high'], f=obs['fav'],
+                    low=tc_items.get('low', {}), mid=tc_items.get('mid', {}), high=tc_items.get('high', {}))
+
     # 門檻:CN 為主、SubmarineTracker 交叉驗證
     bp_mismatch = 0
     sheet_covered = 0  # 有社群總表掉落的航點數
@@ -317,6 +398,9 @@ def main():
             for k in ('low', 'mid', 'high'):
                 drop[k] = [i for i in (int(x) for x in lua_arr((cn_p.get('drop') or {}).get(k) or [])) if i in tc_item]
 
+        loot = build_loot(rid, drop) if not p['start'] else None
+        tc_out = build_tc(rid, drop) if not p['start'] else None
+
         td_out = {}
         for dest in by_map[p['map']]:
             d3 = dist3(rid, dest)
@@ -338,9 +422,19 @@ def main():
             surveyRange=p['survey_dist'],        # 勘查距離,台服權威
             x=p['x'], y=p['y'],
             statReq=sr, drop=drop, toDestination=td_out, unlocks=unlocks_out))
+        if loot:
+            out_points[-1]['loot'] = loot
+        if tc_out:
+            out_points[-1]['tc'] = tc_out
     print(f'航點輸出 {len(out_points)} 筆;門檻與 SubmarineTracker 不一致 {bp_mismatch} 筆')
+    n_loot = sum(len(pt['loot'][t]) for pt in out_points if 'loot' in pt for t in ('low', 'mid', 'high'))
+    n_drop = sum(len(pt['drop'][t]) for pt in out_points if not pt['start'] for t in ('low', 'mid', 'high'))
+    print(f'掉落機率:{n_loot}/{n_drop} 筆掉落有社群機率;台服觀測涵蓋 {len(tc_used)} 航點')
     print(f'掉落:社群總表覆蓋 {sheet_covered}/{len(sectors)} 航點;CN 精選品不在總表的 {cn_extra_total} 筆(已補列)')
     assert sheet_covered == len(sectors), (sheet_covered, len(sectors))
+    for rid in tc_sectors:
+        if rid not in tc_used:
+            fail.append(f'台服紀錄的航點 {rid} 不在輸出航點中')
 
     # map1 的 toDestination 含鍵 '0',convertLuaTable 不會誤轉(鍵 0 存在即非 1-indexed 連續)
     m1 = next(pt for pt in out_points if pt['map'] == 1)
@@ -368,8 +462,13 @@ def main():
         data_sources=[
             dict(title='台服遊戲資料 7.30(航點/零件/等級獎勵/物品名)', desc='SubmarineExploration/SubmarinePart/SubmarineRank/Item', author='SQUARE ENIX', url=''),
             dict(title='部队潜水艇小工具(門檻/掉落/解鎖資料)', desc='原作工具與社群量測資料', author='Yuee', url='https://ff14.huijiwiki.com/wiki/%E9%83%A8%E9%98%9F%E6%BD%9C%E6%B0%B4%E8%89%87%E5%B0%8F%E5%B7%A5%E5%85%B7'),
-            dict(title='SubmarineTracker 社群數據表(門檻交叉驗證)', desc='', author='Infiziert90', url='https://docs.google.com/spreadsheets/d/1eiuGRrQTjJ5n4ogybKOBxJRT7EiJLlX93fge-Z8MmD4'),
+            dict(title='SubmarineTracker 社群數據表(完整掉落表/掉落機率/數量;門檻交叉驗證)', desc='全球玩家上傳的潛水艇紀錄;tier 機率、tier 內佔比、各回收等級平均數量', author='Infiziert90', url='https://docs.google.com/spreadsheets/d/1eiuGRrQTjJ5n4ogybKOBxJRT7EiJLlX93fge-Z8MmD4'),
+            dict(title='台服 SubmarineTracker 紀錄(掉落驗證/台服觀測次數)',
+                 desc=f"{tc_stats['records']} 筆航點紀錄,{tc_stats['period']['from']}~{tc_stats['period']['to']},{len(tc_sectors)} 個航點;只用彙總次數",
+                 author='台服版維護者', url=''),
         ],
+        tc_loot=dict(records=tc_stats['records'], sectors=len(tc_sectors),
+                     period_from=tc_stats['period']['from'], period_to=tc_stats['period']['to']),
         item_db=out_items,
         max_filter_count=cn.get('max_filter_count', 300),
         max_rank=max_rank,
@@ -379,7 +478,7 @@ def main():
         sea_name_map=out_seas,
         point_data=out_points,
         reward_category_map=REWARD_CATEGORY_TC,
-        tool_version=101,
+        tool_version=102,
     )
 
     if fail:
